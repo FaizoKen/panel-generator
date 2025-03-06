@@ -9,5 +9,5 @@ export default function LoginLink(props: any) {
     [location.pathname]
   );
 
-  return <a href={href} {...props}></a>;
+  return <a{...props}></a>;
 }
