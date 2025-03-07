@@ -12,6 +12,8 @@ import EditorComponentActions from "./EditorActionSet";
 import EditorComponentEmojiSelect from "./EditorComponentEmojiSelect";
 import ColorPicker from "./ColorPicker";
 import ValidationError from "./ValidationError";
+import { colorIntToHex } from "../util/discord";
+import { useMemo } from "react";
 
 interface Props {
   rowIndex: number;
@@ -76,12 +78,21 @@ export default function EditorComponentSelectMenuOption({
     (state) => state.getSelectMenu(rowIndex, compIndex)?.options?.[optionIndex],
     shallow
   );
+
+    const color = option?.message_response.color;
+  
+    const hexColor = useMemo(
+      () => (color !== undefined ? colorIntToHex(color) : "#1f2225"),
+      [color]
+    );
+
   if (!option) {
     return <div></div>;
   }
 
   return (
-    <div className="p-3 border-2 border-dark-6 rounded-md">
+    <div className="bg-dark-3 p-3 rounded-md border-l-4"
+    style={{ borderColor: hexColor }}>
       <Collapsable
         id={`components.${rowId}.select.${compId}.options.${optionId}`}
         valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.options.${optionIndex}`}
@@ -132,7 +143,7 @@ export default function EditorComponentSelectMenuOption({
               onChange={(v) => setEmoji(rowIndex, compIndex, optionIndex, v)}
             />
             <EditorInput
-              label="Label"
+              label="Label & Title"
               maxLength={80}
               value={option.label}
               onChange={(v) => setLabel(rowIndex, compIndex, optionIndex, v)}
@@ -141,7 +152,7 @@ export default function EditorComponentSelectMenuOption({
             />
           </div>
           <EditorInput
-            label="Description"
+            label="Description & Footer"
             maxLength={100}
             value={option.description || ""}
             onChange={(v) =>
