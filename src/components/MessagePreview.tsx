@@ -234,7 +234,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                   })}
 
                 <div className="discord-attachments">
-                  {sendMode === "channel" &&
+                  {sendMode &&
                     msg.components.map((row) => (
                       <div className="discord-action-row" key={row.id}>
                         {row.components.map((comp) =>
