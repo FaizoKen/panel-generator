@@ -31,8 +31,6 @@ export default function EditorEmbedFooter({ embedIndex, embedId }: Props) {
     shallow
   );
 
-  console.log("render footer", embedIndex);
-
   return (
     <Collapsable
       title="Footer"

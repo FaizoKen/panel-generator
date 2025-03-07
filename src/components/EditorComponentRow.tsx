@@ -120,6 +120,7 @@ export default function EditorComponentRow({ rowIndex, rowId }: Props) {
                         style: 2,
                         label: "",
                         action_set_id: getUniqueId().toString(),
+                        modals: []
                       })
                     }
                   >

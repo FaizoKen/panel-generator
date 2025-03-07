@@ -11,6 +11,9 @@ import EditorInput from "./EditorInput";
 import EditorActionSet from "./EditorActionSet";
 import EditorComponentEmojiSelect from "./EditorComponentEmojiSelect";
 import CheckBox from "./CheckBox";
+import { AutoAnimate } from "../util/autoAnimate";
+import EditorComponentButtonShowModal from "./EditorComponentButtonShowModal";
+import { getUniqueId } from "../util";
 
 interface Props {
   rowIndex: number;
@@ -18,6 +21,7 @@ interface Props {
   compIndex: number;
   compId: number;
 }
+
 
 const buttonBorderColors = {
   1: "border-blurple",
@@ -33,6 +37,26 @@ export default function EditorComponentButton({
   compIndex,
   compId,
 }: Props) {
+const buttons = useCurrentMessageStore(
+  (state) => {
+    const button = state.getButton(rowIndex, compIndex);
+    if (!button || !("modals" in button)) return [];
+    return button.modals.map((o) => o.id);
+  },
+  shallow
+);
+    const [add, clearModals] = useCurrentMessageStore(
+      (state) => [state.addButtonModal, state.clearButtonModal],
+      shallow
+    );
+  function addModal() {
+    add(rowIndex, compIndex, {
+      id: getUniqueId(),
+      name: "",
+      style: 1,
+    });
+  }
+
   const buttonCount = useCurrentMessageStore(
     (state) => state.components[rowIndex].components.length
   );
@@ -184,7 +208,51 @@ export default function EditorComponentButton({
               className="flex-auto"
               validationPath={`components.${rowIndex}.components.${compIndex}.label`}
             />
-          </div>
+            </div>
+            <Collapsable
+                    id={`components.${rowId}.select.${compId}.modals`}
+                    valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.modals`}
+                    title="Show Modals"
+                  >
+                    <AutoAnimate className="space-y-2">
+                      {buttons.map((id, i) => (
+                        <div key={id}>
+                          <EditorComponentButtonShowModal
+                            rowIndex={rowIndex}
+                            rowId={rowId}
+                            compIndex={compIndex}
+                            compId={compId}
+                            modalIndex={i}
+                            modalId={id}
+                          />
+                        </div>
+                      ))}
+                    </AutoAnimate>
+                    <div className="space-x-3 mt-3">
+                      {buttons.length < 5 ? (
+                        <button
+                          className="bg-blurple px-3 py-2 rounded transition-colors hover:bg-blurple-dark text-white"
+                          onClick={addModal}
+                        >
+                          Add Modal
+                        </button>
+                      ) : (
+                        <button
+                          disabled
+                          className="bg-dark-2 px-3 py-2 rounded transition-colors cursor-not-allowed text-gray-300"
+                        >
+                          Add Modal
+                        </button>
+                      )}
+                      <button
+                        className="px-3 py-2 rounded border-2 border-red hover:bg-red transition-colors text-white"
+                        onClick={() => clearModals(rowIndex, compIndex)}
+                      >
+                        Clear Modal
+                      </button>
+                    </div>
+                  </Collapsable>
+          
           {style === 5 ? (
             <EditorInput
               label="URL"

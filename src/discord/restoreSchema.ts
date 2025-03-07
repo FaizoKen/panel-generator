@@ -242,6 +242,20 @@ export const buttonStyleSchema = z
   .or(z.literal(4))
   .or(z.literal(5));
 
+  export const buttonModalSchema = z.object({
+    id: uniqueIdSchema.default(() => getUniqueId()),
+    name: z.string().min(1).max(100),
+    placeholder: z.optional(z.string().min(1).max(100)),
+    style: z.literal(1).or(z.literal(2)).or(z.literal(3)).or(z.literal(4)),
+    required: z.optional(z.boolean()),
+    minLength: z.optional(z.number().max(1000)),
+    maxLength: z.optional(z.number().max(1000)),
+  });
+  
+  export type MessageComponentButtonModal = z.infer<
+    typeof buttonModalSchema
+  >;
+
 export type MessageComponentButtonStyle = z.infer<typeof buttonStyleSchema>;
 
 export const buttonSchema = z
@@ -256,6 +270,7 @@ export const buttonSchema = z
       (d) => d ?? undefined,
       z.string().default(() => getUniqueId().toString())
     ),
+    modals: z.array(buttonModalSchema).min(1).max(5),
   })
   .or(
     z.object({

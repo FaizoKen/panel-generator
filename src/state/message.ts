@@ -6,6 +6,7 @@ import {
   EmbedField,
   Message,
   MessageComponentActionRow,
+  buttonModal,
   MessageComponentButton,
   MessageEmbed,
   MessageComponentSelectMenuOption,
@@ -95,7 +96,13 @@ export interface MessageStore extends Message {
     j: number,
     option: MessageComponentSelectMenuOption
   ) => void;
+  addButtonModal: (
+    i: number,
+    j: number,
+    modal: buttonModal
+  ) => void;
   clearSelectMenuOptions: (i: number, j: number) => void;
+  clearButtonModal: (i: number, j: number) => void;
   moveSelectMenuOptionDown: (i: number, j: number, k: number) => void;
   moveSelectMenuOptionUp: (i: number, j: number, k: number) => void;
   duplicateSelectMenuOption: (i: number, j: number, k: number) => void;
@@ -105,6 +112,12 @@ export interface MessageStore extends Message {
     j: number,
     k: number,
     label: string
+  ) => void;
+  setModalName: (
+    i: number,
+    j: number,
+    k: number,
+    name: string
   ) => void;
   setSelectMenuOptionDescription: (
     i: number,
@@ -891,6 +904,29 @@ export const createMessageStore = (key: string) =>
                   selectMenu.options.push(option);
                 }
               }),
+              addButtonModal: (
+                i: number,
+                j: number,
+                modal: buttonModal
+              ) =>
+                set((state) => {
+                  const row = state.components && state.components[i];
+                  if (!row) {
+                    return;
+                  }
+                  const button = row.components && row.components[j];
+                  if (!button || button.type == 3) {
+                    return;
+                  }
+  
+                  if (!('url' in button)) {
+                    if (!button.modals) {
+                        button.modals = [modal];
+                    } else {
+                        button.modals.push(modal);
+                    }
+                }                
+                }),
             clearSelectMenuOptions: (i: number, j: number) =>
               set((state) => {
                 const row = state.components && state.components[i];
@@ -908,6 +944,22 @@ export const createMessageStore = (key: string) =>
 
                 selectMenu.options = [];
               }),
+              clearButtonModal: (i: number, j: number) =>
+                set((state) => {
+                  const row = state.components && state.components[i];
+                  if (!row) {
+                    return;
+                  }
+                  const button = row.components && row.components[j];
+                  if (!button || button.type == 3) {
+                    return;
+                  }
+
+                  if (!('url' in button)) {
+                    button.modals = [];
+                  }
+                  
+                }),
             moveSelectMenuOptionDown: (i: number, j: number, k: number) =>
               set((state) => {
                 const row = state.components && state.components[i];
@@ -1003,6 +1055,31 @@ export const createMessageStore = (key: string) =>
                 }
                 option.label = label;
               }),
+              setModalName: (
+                i: number,
+                j: number,
+                k: number,
+                name: string
+              ) =>
+                set((state) => {
+                  const row = state.components && state.components[i];
+                  if (!row) {
+                    return;
+                  }
+                  const button = row.components && row.components[j];
+                  if (!button || button.type == 3) {
+                    return;
+                  }
+                
+
+                    if (!('url' in button)) {
+                      const modal = button.modals && button.modals[k];
+                      modal.name = name;
+                    } else {
+                      return;
+                    }
+                }      
+                ),
             setSelectMenuOptionDescription: (
               i: number,
               j: number,
