@@ -104,9 +104,13 @@ export interface MessageStore extends Message {
   clearSelectMenuOptions: (i: number, j: number) => void;
   clearButtonModal: (i: number, j: number) => void;
   moveSelectMenuOptionDown: (i: number, j: number, k: number) => void;
+  moveButtonModalDown: (i: number, j: number, k: number) => void;
   moveSelectMenuOptionUp: (i: number, j: number, k: number) => void;
+  moveButtonModalUp: (i: number, j: number, k: number) => void;
   duplicateSelectMenuOption: (i: number, j: number, k: number) => void;
+  duplicateButtonModal: (i: number, j: number, k: number) => void;
   deleteSelectMenuOption: (i: number, j: number, k: number) => void;
+  deleteButtonModal: (i: number, j: number, k: number) => void;
   setSelectMenuOptionLabel: (
     i: number,
     j: number,
@@ -915,17 +919,16 @@ export const createMessageStore = (key: string) =>
                     return;
                   }
                   const button = row.components && row.components[j];
-                  if (!button || button.type == 3) {
+                  if (!button || button.type == 3 || 'url' in button) {
                     return;
                   }
   
-                  if (!('url' in button)) {
                     if (!button.modals) {
                         button.modals = [modal];
                     } else {
                         button.modals.push(modal);
                     }
-                }                
+                               
                 }),
             clearSelectMenuOptions: (i: number, j: number) =>
               set((state) => {
@@ -951,15 +954,14 @@ export const createMessageStore = (key: string) =>
                     return;
                   }
                   const button = row.components && row.components[j];
-                  if (!button || button.type == 3) {
+                  if (!button || button.type == 3 || 'url' in button) {
                     return;
                   }
 
-                  if (!('url' in button)) {
-                    button.modals = [];
-                  }
+                  button.modals = [];
                   
                 }),
+                
             moveSelectMenuOptionDown: (i: number, j: number, k: number) =>
               set((state) => {
                 const row = state.components && state.components[i];
@@ -977,6 +979,23 @@ export const createMessageStore = (key: string) =>
                 selectMenu.options.splice(k, 1);
                 selectMenu.options.splice(k + 1, 0, option);
               }),
+              moveButtonModalDown: (i: number, j: number, k: number) =>
+                set((state) => {
+                  const row = state.components && state.components[i];
+                  if (!row) {
+                    return;
+                  }
+                  const button = row.components && row.components[j];
+                  if (!button || button.type == 3 || 'url' in button) {
+                    return;
+                  }
+                  const modal = button.modals[k];
+                  if (!modal) {
+                    return;
+                  }
+                  button.modals.splice(k, 1);
+                  button.modals.splice(k + 1, 0, modal);
+                }),
             moveSelectMenuOptionUp: (i: number, j: number, k: number) =>
               set((state) => {
                 const row = state.components && state.components[i];
@@ -994,6 +1013,23 @@ export const createMessageStore = (key: string) =>
                 selectMenu.options.splice(k, 1);
                 selectMenu.options.splice(k - 1, 0, option);
               }),
+              moveButtonModalUp: (i: number, j: number, k: number) =>
+                set((state) => {
+                  const row = state.components && state.components[i];
+                  if (!row) {
+                    return;
+                  }
+                  const button = row.components && row.components[j];
+                  if (!button || button.type == 3 || 'url' in button) {
+                    return;
+                  }
+                  const modal = button.modals[k];
+                  if (!modal) {
+                    return;
+                  }
+                  button.modals.splice(k, 1);
+                  button.modals.splice(k - 1, 0, modal);
+                }),
             duplicateSelectMenuOption: (i: number, j: number, k: number) =>
               set((state) => {
                 const row = state.components && state.components[i];
@@ -1018,6 +1054,18 @@ export const createMessageStore = (key: string) =>
                   action_set_id: actionId,
                 });
               }),
+              duplicateButtonModal: (i: number, j: number, k: number) =>
+                set((state) => {
+                  const row = state.components?.[i];
+                  const button = row?.components?.[j];
+              
+                  if (!button || button.type === 3 || 'url' in button) return;
+              
+                  const modal = button.modals?.[k];
+                  if (!modal) return;
+              
+                  button.modals.splice(k + 1, 0, { ...modal, id: getUniqueId() });
+                }),              
             deleteSelectMenuOption: (i: number, j: number, k: number) =>
               set((state) => {
                 const row = state.components && state.components[i];
@@ -1034,6 +1082,21 @@ export const createMessageStore = (key: string) =>
                   delete state.actions[option.action_set_id];
                 }
               }),
+              deleteButtonModal: (i: number, j: number, k: number) =>
+                set((state) => {
+                  const row = state.components && state.components[i];
+                  if (!row) {
+                    return;
+                  }
+                  const button = row.components && row.components[j];
+                  if (!button || button.type == 3 || 'url' in button) {
+                    return;
+                  }
+                  button.modals.splice(k, 1);
+                  // for (const option of removed) {
+                  //   delete state.actions[modals.action_set_id];
+                  // }
+                }),
             setSelectMenuOptionLabel: (
               i: number,
               j: number,
@@ -1067,17 +1130,11 @@ export const createMessageStore = (key: string) =>
                     return;
                   }
                   const button = row.components && row.components[j];
-                  if (!button || button.type == 3) {
+                  if (!button || button.type == 3 || 'url' in button) {
                     return;
                   }
-                
-
-                    if (!('url' in button)) {
-                      const modal = button.modals && button.modals[k];
-                      modal.name = name;
-                    } else {
-                      return;
-                    }
+                  const modal = button.modals && button.modals[k];
+                  modal.name = name;
                 }      
                 ),
             setSelectMenuOptionDescription: (

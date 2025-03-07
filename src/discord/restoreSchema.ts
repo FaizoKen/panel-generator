@@ -293,11 +293,7 @@ export const selectMenuOptionSchema = z.object({
   description: z.preprocess((d) => d || undefined, z.optional(z.string())),
   message_response: z.preprocess( (d) => (d == null ? {} : d), responseSchema ),
   emoji: z.preprocess((d) => d ?? undefined, z.optional(emojiSchema)),
-  action_set_id: z.preprocess(
-    (d) => d ?? undefined,
-    z.string().default(() => getUniqueId().toString())
-  ),
-});
+  action_set_id: z.preprocess( (d) => d ?? undefined, z.string().default(() => getUniqueId().toString()) ), });
 
 export type MessageComponentSelectMenuOption = z.infer<
   typeof selectMenuOptionSchema

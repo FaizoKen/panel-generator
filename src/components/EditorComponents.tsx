@@ -13,6 +13,7 @@ export default function EditorComponents() {
     (state) => state.components.map((e) => e.id),
     shallow
   );
+  
   const addRow = useCurrentMessageStore((state) => state.addComponentRow);
   const clearComponents = useCurrentMessageStore(
     (state) => state.clearComponentRows
@@ -23,8 +24,17 @@ export default function EditorComponents() {
     addRow({
       id: getUniqueId(),
       type: 1,
-      components: [],
-    });
+      components: [
+        {
+          id: getUniqueId(),
+          type: 2,
+          style: 2,
+          label: "",
+          action_set_id: "",
+          modals: [],
+        },
+      ],
+    })
   }
 
   function addSelectMenuRow() {

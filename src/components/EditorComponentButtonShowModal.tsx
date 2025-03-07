@@ -41,10 +41,10 @@ export default function EditorComponentSelectMenuOption({
 
   const [moveUp, moveDown, duplicate, remove] = useCurrentMessageStore(
     (state) => [
-      state.moveSelectMenuOptionUp,
-      state.moveSelectMenuOptionDown,
-      state.duplicateSelectMenuOption,
-      state.deleteSelectMenuOption,
+      state.moveButtonModalUp,
+      state.moveButtonModalDown,
+      state.duplicateButtonModal,
+      state.deleteButtonModal,
     ],
     shallow
   );
@@ -95,10 +95,10 @@ export default function EditorComponentSelectMenuOption({
   }
 
   return (
-    <div className="space-x-3 mt-3">
+    <div className="border-2 border-dark-6 rounded-md p-3">
       <Collapsable
-        id={`components.${rowId}.select.${compId}.modals.${modalId}`} // need edit
-        valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}`} // need edit
+        id={`components.${rowId}.select.${compId}.modals.${modalId}`}
+        valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}`}
         title={`Modal ${modalIndex + 1}`}
         extra={
           modal.name && (
