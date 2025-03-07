@@ -10,6 +10,8 @@ import { useCurrentMessageStore } from "../state/message";
 import EditorInput from "./EditorInput";
 import EditorComponentActions from "./EditorActionSet";
 import EditorComponentEmojiSelect from "./EditorComponentEmojiSelect";
+import ColorPicker from "./ColorPicker";
+import ValidationError from "./ValidationError";
 
 interface Props {
   rowIndex: number;
@@ -48,6 +50,22 @@ export default function EditorComponentSelectMenuOption({
 
   const setDescription = useCurrentMessageStore(
     (state) => state.setSelectMenuOptionDescription
+  );
+
+  const setMsgDescription = useCurrentMessageStore(
+    (state) => state.setSelectMenuOptionMsgDescription
+  );
+
+  const setMsgUrl = useCurrentMessageStore(
+    (state) => state.setSelectMenuOptionMsgUrl
+  );
+
+  const setMsgColor = useCurrentMessageStore(
+    (state) => state.setSelectMenuOptionMsgColor
+  );
+
+  const setMsgImageUrl = useCurrentMessageStore(
+    (state) => state.setSelectMenuOptionMsgImageUrl
   );
 
   const setEmoji = useCurrentMessageStore(
@@ -132,6 +150,75 @@ export default function EditorComponentSelectMenuOption({
             className="flex-auto"
             validationPath={`components.${rowIndex}.components.${compIndex}.options.${optionIndex}.description`}
           />
+          <Collapsable
+            id={`components.${rowId}.select.${compId}.options.${optionId}.message`}
+            valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.options.${optionIndex}.message_response`}
+            title="Message Response"
+          >
+            <div className="space-y-4">
+              <EditorInput
+                type="textarea"
+                label="Description"
+                maxLength={4096}
+                value={option.message_response.description || ""}
+                onChange={(v) =>
+                  setMsgDescription(
+                    rowIndex,
+                    compIndex,
+                    optionIndex,
+                    v || undefined
+                  )
+                }
+                className="flex-auto"
+                validationPath={`components.${rowIndex}.components.${compIndex}.options.${optionIndex}.message_response.description`}
+                controls={true}
+              />
+              <div className="flex space-x-3">
+                <EditorInput
+                  type="url"
+                  label="URL"
+                  value={option.message_response.url || ""}
+                  onChange={(v) =>
+                    setMsgUrl(rowIndex, compIndex, optionIndex, v || undefined)
+                  }
+                  className="w-full"
+                  validationPath={`components.${rowIndex}.components.${compIndex}.options.${optionIndex}.message_response.url`}
+                />
+                <div>
+                  <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
+                    Color
+                  </div>
+                  <ColorPicker
+                    value={option.message_response.color}
+                    onChange={(v) =>
+                      setMsgColor(
+                        rowIndex,
+                        compIndex,
+                        optionIndex,
+                        v || undefined
+                      )
+                    }
+                  />
+                  <ValidationError path={`components.${rowIndex}.components.${compIndex}.options.${optionIndex}.message_response.color`} />
+                </div>
+              </div>
+              <EditorInput
+                type="url"
+                label="Image URL"
+                value={option.message_response.image_url || ""}
+                onChange={(v) =>
+                  setMsgImageUrl(
+                    rowIndex,
+                    compIndex,
+                    optionIndex,
+                    v || undefined
+                  )
+                }
+                className="flex-auto"
+                validationPath={`components.${rowIndex}.components.${compIndex}.options.${optionIndex}.message_response.image_url`}
+              />
+            </div>
+          </Collapsable>
           <EditorComponentActions setId={option.action_set_id} />
         </div>
       </Collapsable>

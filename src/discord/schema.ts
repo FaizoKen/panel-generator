@@ -262,10 +262,19 @@ export const buttonSchema = z
 
 export type MessageComponentButton = z.infer<typeof buttonSchema>;
 
+export const selectMenuOptionResponseSchema = z
+  .object({
+    description: z.optional(z.string().max(4096)),
+    url: z.optional(z.string().refine(...urlRefinement)),
+    color: z.optional(z.number().max(16777215)),
+    image_url: z.optional(z.string().refine(...urlRefinement)),
+  });
+
 export const selectMenuOptionSchema = z.object({
   id: uniqueIdSchema.default(() => getUniqueId()),
   label: z.string().min(1).max(100),
   description: z.optional(z.string().min(1).max(100)),
+  message_response: z.optional(selectMenuOptionResponseSchema).default({}),
   emoji: z.optional(z.nullable(emojiSchema)),
   action_set_id: z.string().default(() => getUniqueId().toString()),
 });

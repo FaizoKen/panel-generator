@@ -226,6 +226,13 @@ export const emojiSchema = z.object({
   animated: z.preprocess((d) => d ?? undefined, z.boolean().default(false)),
 });
 
+export const responseSchema = z.object({
+  image_url: z.preprocess((d) => d || undefined, z.optional(z.string())),
+  description: z.preprocess((d) => d || undefined, z.optional(z.string())),
+  color: z.preprocess( (d) => d ?? undefined, z.optional(z.number()) ),
+  url: z.preprocess((d) => d || undefined, z.optional(z.string())),
+});
+
 export type Emoji = z.infer<typeof emojiSchema>;
 
 export const buttonStyleSchema = z
@@ -269,6 +276,7 @@ export const selectMenuOptionSchema = z.object({
   id: uniqueIdSchema,
   label: z.preprocess((d) => d ?? undefined, z.string().default("")),
   description: z.preprocess((d) => d || undefined, z.optional(z.string())),
+  message_response: z.preprocess( (d) => (d == null ? {} : d), responseSchema ),
   emoji: z.preprocess((d) => d ?? undefined, z.optional(emojiSchema)),
   action_set_id: z.preprocess(
     (d) => d ?? undefined,

@@ -112,6 +112,30 @@ export interface MessageStore extends Message {
     k: number,
     description: string | undefined
   ) => void;
+  setSelectMenuOptionMsgDescription: (
+    i: number,
+    j: number,
+    k: number,
+    description: string | undefined
+  ) => void;
+  setSelectMenuOptionMsgUrl: (
+    i: number,
+    j: number,
+    k: number,
+    url: string | undefined
+  ) => void;
+  setSelectMenuOptionMsgColor: (
+    i: number,
+    j: number,
+    k: number,
+    color: number | undefined
+  ) => void;
+  setSelectMenuOptionMsgImageUrl: (
+    i: number,
+    j: number,
+    k: number,
+    description: string | undefined
+  ) => void;
   setSelectMenuOptionEmoji: (
     i: number,
     j: number,
@@ -1000,6 +1024,88 @@ export const createMessageStore = (key: string) =>
                 }
                 option.description = description;
               }),
+              setSelectMenuOptionMsgDescription: (
+                i: number,
+                j: number,
+                k: number,
+                description: string | undefined
+              ) =>
+                set((state) => {
+                  const row = state.components && state.components[i];
+                  if (!row) {
+                    return;
+                  }
+                  const selectMenu = row.components && row.components[j];
+                  if (!selectMenu || selectMenu.type !== 3) {
+                    return;
+                  }
+                  const option = selectMenu.options && selectMenu.options[k];
+                  if (!option) {
+                    return;
+                  }
+                  option.message_response.description = description;
+                }),
+                setSelectMenuOptionMsgUrl: (                    
+                  i: number,
+                  j: number,
+                  k: number,
+                  url: string | undefined) =>
+                  set((state) => {
+                    const row = state.components && state.components[i];
+                    if (!row) {
+                      return;
+                    }
+                    const selectMenu = row.components && row.components[j];
+                    if (!selectMenu || selectMenu.type !== 3) {
+                      return;
+                    }
+                    const option = selectMenu.options && selectMenu.options[k];
+                    if (!option) {
+                      return;
+                    }
+                    option.message_response.url = url;
+                  }),
+                  setSelectMenuOptionMsgColor: (                    
+                    i: number,
+                    j: number,
+                    k: number,
+                    color: number | undefined) =>
+                    set((state) => {
+                      const row = state.components && state.components[i];
+                      if (!row) {
+                        return;
+                      }
+                      const selectMenu = row.components && row.components[j];
+                      if (!selectMenu || selectMenu.type !== 3) {
+                        return;
+                      }
+                      const option = selectMenu.options && selectMenu.options[k];
+                      if (!option) {
+                        return;
+                      }
+                      option.message_response.color = color;
+                    }),
+                  setSelectMenuOptionMsgImageUrl: (
+                    i: number,
+                    j: number,
+                    k: number,
+                    description: string | undefined
+                  ) =>
+                    set((state) => {
+                      const row = state.components && state.components[i];
+                      if (!row) {
+                        return;
+                      }
+                      const selectMenu = row.components && row.components[j];
+                      if (!selectMenu || selectMenu.type !== 3) {
+                        return;
+                      }
+                      const option = selectMenu.options && selectMenu.options[k];
+                      if (!option) {
+                        return;
+                      }
+                      option.message_response.image_url = description;
+                    }),
             setSelectMenuOptionEmoji: (
               i: number,
               j: number,

@@ -43,6 +43,7 @@ export default function EditorComponentSelectMenu({
     add(rowIndex, compIndex, {
       id: getUniqueId(),
       label: "",
+      message_response: {},
       action_set_id: getUniqueId().toString(),
     });
   }
