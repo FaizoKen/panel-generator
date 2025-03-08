@@ -1,39 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
-import { useCurrentMessageStore } from "../../state/message";
-import { useSharedMessageCreateMutation } from "../../api/mutations";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useToasts } from "../../util/toasts";
+import useEncodedMessageURL from "./EncodedMessageURL";
 
 export default function ShareView() {
   const navigate = useNavigate();
 
-  const [shareUrl, setShareUrl] = useState("");
-
-  const shareCreateMutation = useSharedMessageCreateMutation();
-
   const createToast = useToasts((state) => state.create);
 
-  useEffect(() => {
-    shareCreateMutation.mutate(
-      {
-        data: useCurrentMessageStore.getState(),
-      },
-      {
-        onSuccess: (resp) => {
-          if (resp.success) {
-            setShareUrl(resp.data.url);
-          } else {
-            createToast({
-              title: "Failed to create share",
-              message: `${resp.error}`,
-              type: "error",
-            });
-          }
-        },
-      }
-    );
-  }, []);
+  const encodedMessageURL = useEncodedMessageURL();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -58,7 +34,7 @@ export default function ShareView() {
         </div>
         <input
           type="text"
-          value={shareUrl}
+          value={encodedMessageURL}
           className="px-3 py-2 bg-dark-2 rounded w-full focus:outline-none text-white mb-5"
           readOnly
           ref={inputRef}
