@@ -7,8 +7,22 @@ import { useMemo } from "react";
 import { useToasts } from "../../util/toasts";
 import { parseMessageWithAction } from "../../discord/restoreSchema";
 
+const decodeMessage = (sharedMessageId: string | undefined) => {
+  if (!sharedMessageId) return null; // Handle undefined case
+
+  try {
+    const jsonString = decodeURIComponent(atob(sharedMessageId));
+    return JSON.parse(jsonString);
+  } catch (error) {
+    console.error("Decoding failed:", error);
+    return null;
+  }
+};
+
 export default function ShareRestoreView() {
-  const { sharedMessageId } = useParams();
+  const { sharedMessageId } = useParams<{ sharedMessageId: string }>(); // Ensure TypeScript knows the expected param
+
+  const decodedMessage = decodeMessage(sharedMessageId);
 
   const navigate = useNavigate();
 
@@ -19,11 +33,11 @@ export default function ShareRestoreView() {
   const createToast = useToasts((state) => state.create);
 
   const parsedData = useMemo(() => {
-    if (!sharedMessage) return null;
+    if (!decodedMessage) return null;
 
-    if (sharedMessage.success) {
+    if (decodedMessage) {
       try {
-        const parsedData = parseMessageWithAction(sharedMessage.data.data);
+        const parsedData = parseMessageWithAction(decodedMessage);
         return parsedData;
       } catch (e) {
         createToast({
@@ -35,7 +49,7 @@ export default function ShareRestoreView() {
     } else {
       createToast({
         title: "Failed to load shared message",
-        message: `${sharedMessage.error}`,
+        message: `Error`,
         type: "error",
       });
     }
