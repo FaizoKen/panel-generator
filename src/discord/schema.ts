@@ -230,9 +230,9 @@ export type MessageComponentButtonStyle = z.infer<typeof buttonStyleSchema>;
 
 export const buttonModalSchema = z.object({
   id: uniqueIdSchema.default(() => getUniqueId()),
-  name: z.string().min(1).max(100),
+  name: z.string().max(100).default(""),
   placeholder: z.optional(z.string().min(1).max(100)),
-  style: z.literal(1).or(z.literal(2)).or(z.literal(3)).or(z.literal(4)),
+  style: z.literal(1).or(z.literal(2)).or(z.literal(3)).or(z.literal(4)).default(1),
   required: z.optional(z.boolean()),
   minLength: z.optional(z.number().max(1000)),
   maxLength: z.optional(z.number().max(1000)),
@@ -249,7 +249,7 @@ export const buttonSchema = z
     emoji: z.optional(z.nullable(emojiSchema)),
     disabled: z.optional(z.boolean()),
     action_set_id: z.string().default(() => getUniqueId().toString()),
-    modals: z.array(buttonModalSchema).min(1).max(5),
+    modals: z.array(buttonModalSchema).max(5).default([]),
   })
   .or(
     z.object({
