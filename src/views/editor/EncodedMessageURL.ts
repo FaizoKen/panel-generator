@@ -10,7 +10,7 @@ const useEncodedMessageURL = () => {
     try {
       const jsonString = JSON.stringify(msg);
       const base64Encoded = btoa(encodeURIComponent(jsonString));
-      return `${window.location.origin}/${base64Encoded}`;
+      return `${window.location.href}/${base64Encoded}`;
     } catch (error) {
       console.error("Encoding failed:", error);
       return "";
