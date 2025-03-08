@@ -182,54 +182,188 @@ export interface MessageStore extends Message {
 }
 
 export const defaultMessage: Message = {
-  content:
-    'Welcome to **Embed Generator**! 🎉 Create stunning embed messages for your Discord server with ease!\n\nIf you\'re ready to start, simply click on the "Clear" button at the top of the editor and create your own message.\n\nShould you need any assistance or have questions, feel free to join our [support server](/discord) where you can connect with our helpful community members and get the support you need.\n\nWe also have a [complementary bot](/invite) that enhances the experience with Embed Generator. Check out our [Discord bot](/invite) which offers features like formatting for mentions, channels, and emoji, creating reaction roles, interactive components, and more.\n\nLet your creativity shine and make your server stand out with Embed Generator! ✨',
-  tts: false,
-  embeds: [
+  "content": "",
+  "tts": false,
+  "embeds": [
     {
-      id: 652627557,
-      title: "About Embed Generator",
-      description:
-        "Embed Generator is a powerful tool that enables you to create visually appealing and interactive embed messages for your Discord server. With the use of webhooks, Embed Generator allows you to customize the appearance of your messages and make them more engaging.\n\nTo get started, all you need is a webhook URL, which can be obtained from the 'Integrations' tab in your server's settings. If you encounter any issues while setting up a webhook, our bot can assist you in creating one.\n\nInstead of using webhooks you can also select a server and channel directly here on the website. The bot will automatically create a webhook for you and use it to send the message.",
-      color: 2326507,
-      fields: [],
+      "id": 257353416,
+      "color": 3447003,
+      "author": {
+        "name": "HoYoMY Community",
+        "icon_url": "https://cdn.discordapp.com/icons/758304326988464179/a_39111c023a81e676d8bfb9db102e6d24.gif?size=4096"
+      },
+      "image": {
+        "url": "https://i.imgur.com/jVtMuP1.png"
+      },
+      "fields": []
     },
     {
-      id: 10674342,
-      title: "Discord Bot Integration",
-      description:
-        "Embed Generator offers a Discord bot integration that can further enhance your the functionality. While it is not mandatory for sending messages, having the bot on your server gives you access to a lot more features!\n\nHere are some key features of our bot:",
-      color: 2326507,
-      fields: [
+      "id": 230688175,
+      "title": "Need Assistance? Here's How to Reach Support",
+      "color": 3447003,
+      "image": {
+        "url": "https://imgur.com/N3IjNdA.png"
+      },
+      "fields": [
         {
-          id: 472281785,
-          name: "Interactive Components",
-          value:
-            "With our bot on your server you can add interactive components like buttons and select menus to your messages. Just invite the bot to your server, select the right server here on the website and you are ready to go!",
+          "id": 351957694,
+          "name": "🎫 Support Button",
+          "value": "Click the button below to start a support thread.",
+          "inline": true
         },
         {
-          id: 608893643,
-          name: "Special Formatting for Mentions, Channels, and Emoji",
-          value:
-            "With the /format command, our bot provides special formatting options for mentions, channel tags, and ready-to-use emoji. No more manual formatting errors! Simply copy and paste the formatted text into the editor.",
+          "id": 278423939,
+          "name": "🆘 Slash Command",
+          "value": "Type `/support` to start a support thread",
+          "inline": true
         },
         {
-          id: 724530251,
-          name: "Recover Embed Generator Messages",
-          value:
-            "If you ever need to retrieve a previously sent message created with Embed Generator, our bot can assist you. Right-click or long-press any message in your server, navigate to the apps menu, and select Restore to Embed Generator. You'll receive a link that leads to the editor page with the selected message.",
+          "id": 258090459,
+          "name": "📩 Direct Message",
+          "value": "Send me a DM to start a support thread.",
+          "inline": true
         },
         {
-          id: 927221233,
-          name: "Additional Features",
-          value:
-            "Our bot also supports fetching images from profile pictures or emojis, webhook management, and more. Invite the bot to your server and use the /help command to explore all the available features!",
+          "id": 781083436,
+          "name": "👤 Report User",
+          "value": "Right-click a user and choose **Report User**",
+          "inline": true
         },
-      ],
-    },
+        {
+          "id": 382287250,
+          "name": "💬 Report Message",
+          "value": "Right-click a message and choose **Report Message**",
+          "inline": true
+        },
+        {
+          "id": 551260849,
+          "name": "​",
+          "value": "​",
+          "inline": true
+        }
+      ]
+    }
   ],
-  components: [],
-  actions: {},
+  "components": [
+    {
+      "id": 95670337,
+      "type": 1,
+      "components": [
+        {
+          "id": 639385666,
+          "type": 3,
+          "placeholder": "Frequently Asked Question (FAQ)",
+          "disabled": false,
+          "options": [
+            {
+              "id": 354268191,
+              "label": "Discord – Community Guidelines",
+              "description": "Discord",
+              "message_response": {},
+              "emoji": {
+                "id": "1298193629625716776",
+                "name": "discord",
+                "animated": false
+              },
+              "action_set_id": "1"
+            },
+            {
+              "id": 879145037,
+              "label": "Discord – Privacy Policy",
+              "description": "Discord",
+              "message_response": {},
+              "emoji": {
+                "id": "1298193629625716776",
+                "name": "discord",
+                "animated": false
+              },
+              "action_set_id": "2"
+            },
+            {
+              "id": 784367495,
+              "label": "Discord – Terms of Service",
+              "description": "Discord",
+              "message_response": {},
+              "emoji": {
+                "id": "1298193629625716776",
+                "name": "discord",
+                "animated": false
+              },
+              "action_set_id": "3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 473382410,
+      "type": 1,
+      "components": [
+        {
+          "id": 3403233,
+          "type": 2,
+          "style": 1,
+          "label": "Contact Support",
+          "emoji": {
+            "id": "1281113840280539137",
+            "name": "logo",
+            "animated": false
+          },
+          "disabled": false,
+          "action_set_id": "msg-button-be9204c",
+          "modals": []
+        },
+        {
+          "id": 587113640,
+          "type": 2,
+          "style": 5,
+          "label": "Server Rules",
+          "emoji": {
+            "name": "📋",
+            "animated": false
+          },
+          "url": "https://discord.com/channels/758304326988464179/759335206380371968",
+          "disabled": false,
+          "action_set_id": ""
+        },
+        {
+          "id": 273509432,
+          "type": 2,
+          "style": 2,
+          "label": "",
+          "emoji": {
+            "name": "⚙️",
+            "animated": false
+          },
+          "disabled": false,
+          "action_set_id": "msg-button-4657595",
+          "modals": []
+        }
+      ]
+    }
+  ],
+  "actions": {
+    "1": {
+      "actions": []
+    },
+    "2": {
+      "actions": []
+    },
+    "3": {
+      "actions": []
+    },
+    "msg-button-be9204c": {
+      "actions": []
+    },
+    "": {
+      "actions": []
+    },
+    "msg-button-4657595": {
+      "actions": []
+    }
+  },
+  "username": "QuickSupport",
+  "avatar_url": "https://cdn.discordapp.com/avatars/1280984633739186318/bc4438497b8c954b836b2fab77cae677.png?size=1024"
 };
 
 export const emptyMessage: Message = {

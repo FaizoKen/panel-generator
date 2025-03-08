@@ -441,7 +441,7 @@ I don't think this is used anywhere, but I'm keeping it here just in case.
 
 .discord-embed .discord-embed-wrapper {
   background-color: #2f3136;
-  max-width: 520px;
+  max-width: 432px;
   border: 1px solid rgba(46, 48, 54, 0.6);
   border-radius: 0 4px 4px 0;
   justify-self: start;
