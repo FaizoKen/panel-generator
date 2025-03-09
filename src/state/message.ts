@@ -1373,36 +1373,46 @@ export const createMessageStore = (key: string) =>
                     ) =>
                       set((state) => {
                         const row = state.components && state.components[i];
-                        if (!row) {
-                          return;
-                        }
+                        if (!row) return;
                         const button = row.components && row.components[j];
-                        if (!button || button.type == 3 || 'url' in button) {
-                          return;
-                        }
+                        if (!button || button.type === 3 || 'url' in button) return;
                         const modal = button.modals && button.modals[k];
-                        modal.minLength = minLength;
-                      }      
-                      ),
-                      setModalmaxLength: (
-                        i: number,
-                        j: number,
-                        k: number,
-                        maxLength: number
-                      ) =>
-                        set((state) => {
-                          const row = state.components && state.components[i];
-                          if (!row) {
-                            return;
+                        if (!modal) return;
+                        const clampedMin = Math.min(Math.max(minLength, 0), 1000);
+                        if (clampedMin === 0) {
+                          delete modal.minLength;
+                        } else {
+                          modal.minLength = clampedMin;
+                          if (modal.maxLength !== undefined && modal.maxLength < clampedMin) {
+                            modal.maxLength = clampedMin;
                           }
-                          const button = row.components && row.components[j];
-                          if (!button || button.type == 3 || 'url' in button) {
-                            return;
+                        }
+                      }),
+                    
+                    setModalmaxLength: (
+                      i: number,
+                      j: number,
+                      k: number,
+                      maxLength: number
+                    ) =>
+                      set((state) => {
+                        const row = state.components && state.components[i];
+                        if (!row) return;
+                        const button = row.components && row.components[j];
+                        if (!button || button.type === 3 || 'url' in button) return;
+                        const modal = button.modals && button.modals[k];
+                        if (!modal) return;
+                        const clampedMax = Math.min(Math.max(maxLength,0), 1000);
+                        if (clampedMax === 0) {
+                          delete modal.maxLength;
+                        } else {
+                          modal.maxLength = clampedMax;
+                          if (modal.minLength !== undefined && modal.minLength > clampedMax) {
+                            modal.minLength = clampedMax;
                           }
-                          const modal = button.modals && button.modals[k];
-                          modal.maxLength = maxLength;
-                        }      
-                        ),
+                        }
+                      }),
+                                                        
                   setModaStyle: (
                     i: number,
                     j: number,

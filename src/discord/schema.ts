@@ -235,8 +235,8 @@ export const buttonModalSchema = z.object({
   value: z.string().max(100).default(""),
   style: z.literal(1).or(z.literal(2)).default(1),
   required: z.optional(z.boolean()),
-  minLength: z.optional(z.number().max(1000)),
-  maxLength: z.optional(z.number().max(1000)),
+  minLength: z.optional(z.number().min(1).max(1000)),
+  maxLength: z.optional(z.number().min(1).max(1000)),
 });
 
 export type buttonModal = z.infer<typeof buttonModalSchema>;
