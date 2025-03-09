@@ -211,6 +211,16 @@ const buttons = useCurrentMessageStore(
               validationPath={`components.${rowIndex}.components.${compIndex}.label`}
             />
             </div>
+          
+          {style === 5 ? (
+            <EditorInput
+              label="URL"
+              type="url"
+              value={url}
+              onChange={(v) => setUrl(rowIndex, compIndex, v)}
+              validationPath={`components.${rowIndex}.components.${compIndex}.url`}
+            />
+          ) : (
             <Collapsable
                     id={`components.${rowId}.select.${compId}.modals`}
                     valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.modals`}
@@ -254,18 +264,8 @@ const buttons = useCurrentMessageStore(
                       </button>
                     </div>
                   </Collapsable>
-          
-          {style === 5 ? (
-            <EditorInput
-              label="URL"
-              type="url"
-              value={url}
-              onChange={(v) => setUrl(rowIndex, compIndex, v)}
-              validationPath={`components.${rowIndex}.components.${compIndex}.url`}
-            />
-          ) : (
-            <EditorActionSet setId={actionSetId} />
           )}
+                      
         </div>
       </Collapsable>
     </div>

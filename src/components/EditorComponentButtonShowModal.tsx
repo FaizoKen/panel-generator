@@ -148,23 +148,6 @@ export default function EditorComponentSelectMenuOption({
         className="flex-auto"
         validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.name`}
       />
-      <EditorInput
-        label="Placeholder"
-        maxLength={80}
-        value={modal.placeholder}
-        onChange={(v) => setPlaceholder(rowIndex, compIndex, modalIndex, v)}
-        className="flex-auto"
-        validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.placeholder`}
-      />
-      <EditorInput
-        label="Value"
-        maxLength={80}
-        value={modal.value}
-        onChange={(v) => setValue(rowIndex, compIndex, modalIndex, v)}
-        className="flex-auto"
-        validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.value`}
-      />
-
       <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
         <div className="flex-1">
           <label className="block text-gray-300 uppercase text-sm font-medium mb-1">
@@ -191,7 +174,6 @@ export default function EditorComponentSelectMenuOption({
         <EditorInput
           label="Min Length"
           type="number"
-          maxLength={80}
           value={modal.minLength?.toString() || ""}
           onChange={(v) => setminLength(rowIndex, compIndex, modalIndex, Number(v))}
           className="flex-1"
@@ -200,13 +182,30 @@ export default function EditorComponentSelectMenuOption({
         <EditorInput
           label="Max Length"
           type="number"
-          maxLength={80}
           value={modal.maxLength?.toString() || ""}
           onChange={(v) => setmaxLength(rowIndex, compIndex, modalIndex, Number(v))}
           className="flex-1"
           validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.maxLength`}
         />
       </div>
+      <EditorInput
+        label="Placeholder"
+        type="textarea"
+        maxLength={80}
+        value={modal.placeholder}
+        onChange={(v) => setPlaceholder(rowIndex, compIndex, modalIndex, v)}
+        className="flex-auto"
+        validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.placeholder`}
+      />
+      <EditorInput
+        label="Value"
+        type="textarea"
+        maxLength={80}
+        value={modal.value}
+        onChange={(v) => setValue(rowIndex, compIndex, modalIndex, v)}
+        className="flex-auto"
+        validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.value`}
+      />
     </div>
   </Collapsable>
 </div>

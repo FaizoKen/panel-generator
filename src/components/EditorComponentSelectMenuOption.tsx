@@ -230,7 +230,6 @@ export default function EditorComponentSelectMenuOption({
               />
             </div>
           </Collapsable>
-          <EditorComponentActions setId={option.action_set_id} />
         </div>
       </Collapsable>
     </div>
