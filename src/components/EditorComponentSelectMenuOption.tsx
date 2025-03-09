@@ -217,6 +217,7 @@ export default function EditorComponentSelectMenuOption({
                 type="url"
                 label="Image URL"
                 value={option.message_response.image_url || ""}
+                imageUpload={true}
                 onChange={(v) =>
                   setMsgImageUrl(
                     rowIndex,

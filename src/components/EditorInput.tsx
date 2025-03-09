@@ -94,7 +94,7 @@ export default function EditorInput({
             {...props}
           />
         )}
-        {imageUpload && !!features?.max_image_upload_size && (
+        {imageUpload && (
           <div className="flex-none">
             <ImageUploadButton onChange={(url) => onChange(url || "")} />
           </div>

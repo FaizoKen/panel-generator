@@ -1,8 +1,6 @@
 import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 import { ChangeEvent, useRef } from "react";
-import { useUploadImageMutation } from "../api/mutations";
 import { useToasts } from "../util/toasts";
-import { useSendSettingsStore } from "../state/sendSettings";
 
 interface Props {
   onChange: (url: string | undefined) => void;
@@ -10,35 +8,47 @@ interface Props {
 
 export default function ImageUploadButton({ onChange }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const selectedGuildId = useSendSettingsStore((state) => state.guildId);
   const createToast = useToasts((s) => s.create);
 
-  const uploadMutation = useUploadImageMutation();
+  const DISCORD_WEBHOOK_URL =
+    "https://discord.com/api/webhooks/1348344739216228473/ua6k3blytGNV7F4uaoKb681xYS67BcwOdAGvNgPyasfZr1rxBn0SJn0sAdgj1dEVYaE7";
+
+  async function uploadToDiscord(file: File) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch(DISCORD_WEBHOOK_URL, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+      const data = await response.json();
+
+      if (data.attachments?.length > 0) {
+        const imageUrl = data.attachments[0].url;
+        onChange(imageUrl);
+      } else {
+        throw new Error("Failed to retrieve image URL");
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      createToast({
+        title: "Error uploading image",
+        message: errorMessage,
+        type: "error",
+      });
+    }
+  }
 
   function onFileUpload(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    uploadMutation.mutate(
-      {
-        guildId: selectedGuildId,
-        file,
-      },
-      {
-        onSuccess: (res) => {
-          if (res.success) {
-            onChange(res.data.cdn_url);
-          } else {
-            createToast({
-              title: "Error uploading image",
-              message: res.error.message || "Unknown error",
-              type: "error",
-            });
-          }
-        },
-      }
-    );
+    uploadToDiscord(file);
   }
 
   return (
