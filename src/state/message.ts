@@ -81,6 +81,12 @@ export interface MessageStore extends Message {
     j: number,
     disabled: boolean | undefined
   ) => void;
+  setModalRequired: (
+    i: number,
+    j: number,
+    k: number,
+    required: boolean | undefined
+  ) => void;
   setSelectMenuPlaceholder: (
     i: number,
     j: number,
@@ -122,6 +128,36 @@ export interface MessageStore extends Message {
     j: number,
     k: number,
     name: string
+  ) => void;
+  setModaPlaceholder: (
+    i: number,
+    j: number,
+    k: number,
+    placeholder: string
+  ) => void;
+  setModalValue: (
+    i: number,
+    j: number,
+    k: number,
+    value: string
+  ) => void;
+  setModalminLength: (
+    i: number,
+    j: number,
+    k: number,
+    minLength: number
+  ) => void;
+  setModalmaxLength: (
+    i: number,
+    j: number,
+    k: number,
+    maxLength: number
+  ) => void;
+  setModaStyle: (
+    i: number,
+    j: number,
+    k: number,
+    style: string
   ) => void;
   setSelectMenuOptionDescription: (
     i: number,
@@ -179,6 +215,7 @@ export interface MessageStore extends Message {
 
   getSelectMenu: (i: number, j: number) => MessageComponentSelectMenu | null;
   getButton: (i: number, j: number) => MessageComponentButton | null;
+  getModal: (i: number, j: number, k: number) => buttonModal | null;
 }
 
 export const defaultMessage: Message = {
@@ -987,6 +1024,25 @@ export const createMessageStore = (key: string) =>
                 }
                 button.disabled = disabled;
               }),
+              setModalRequired: (
+                i: number,
+                j: number,
+                k: number,
+                required: boolean | undefined
+              ) =>
+                set((state) => {
+                  const row = state.components && state.components[i];
+                  if (!row) {
+                    return;
+                  }
+                  const button = row.components && row.components[j];
+                  if (!button || button.type == 3 || 'url' in button) {
+                    return;
+                    
+                  }
+                  const modals = button.modals && button.modals[k];
+                  modals.required = required;
+                }),
             setSelectMenuPlaceholder: (
               i: number,
               j: number,
@@ -1271,6 +1327,104 @@ export const createMessageStore = (key: string) =>
                   modal.name = name;
                 }      
                 ),
+                setModaPlaceholder: (
+                  i: number,
+                  j: number,
+                  k: number,
+                  placeholder: string
+                ) =>
+                  set((state) => {
+                    const row = state.components && state.components[i];
+                    if (!row) {
+                      return;
+                    }
+                    const button = row.components && row.components[j];
+                    if (!button || button.type == 3 || 'url' in button) {
+                      return;
+                    }
+                    const modal = button.modals && button.modals[k];
+                    modal.placeholder = placeholder;
+                  }      
+                  ),
+                  setModalValue: (
+                    i: number,
+                    j: number,
+                    k: number,
+                    value: string
+                  ) =>
+                    set((state) => {
+                      const row = state.components && state.components[i];
+                      if (!row) {
+                        return;
+                      }
+                      const button = row.components && row.components[j];
+                      if (!button || button.type == 3 || 'url' in button) {
+                        return;
+                      }
+                      const modal = button.modals && button.modals[k];
+                      modal.value = value;
+                    }      
+                    ),
+                    setModalminLength: (
+                      i: number,
+                      j: number,
+                      k: number,
+                      minLength: number
+                    ) =>
+                      set((state) => {
+                        const row = state.components && state.components[i];
+                        if (!row) {
+                          return;
+                        }
+                        const button = row.components && row.components[j];
+                        if (!button || button.type == 3 || 'url' in button) {
+                          return;
+                        }
+                        const modal = button.modals && button.modals[k];
+                        modal.minLength = minLength;
+                      }      
+                      ),
+                      setModalmaxLength: (
+                        i: number,
+                        j: number,
+                        k: number,
+                        maxLength: number
+                      ) =>
+                        set((state) => {
+                          const row = state.components && state.components[i];
+                          if (!row) {
+                            return;
+                          }
+                          const button = row.components && row.components[j];
+                          if (!button || button.type == 3 || 'url' in button) {
+                            return;
+                          }
+                          const modal = button.modals && button.modals[k];
+                          modal.maxLength = maxLength;
+                        }      
+                        ),
+                  setModaStyle: (
+                    i: number,
+                    j: number,
+                    k: number,
+                    style: string
+                  ) =>
+                    set((state) => {
+                      const row = state.components && state.components[i];
+                      if (!row) {
+                        return;
+                      }
+                      const button = row.components && row.components[j];
+                      if (!button || button.type == 3 || 'url' in button) {
+                        return;
+                      }
+                      const modal = button.modals && button.modals[k];
+                      const parsedStyle = Number(style);
+                      if (parsedStyle === 1 || parsedStyle === 2) {
+                        modal.style = parsedStyle;
+                      }
+                    }      
+                    ),
             setSelectMenuOptionDescription: (
               i: number,
               j: number,
@@ -1591,6 +1745,21 @@ export const createMessageStore = (key: string) =>
                 return button;
               }
               return null;
+            },
+            getModal: (i: number, j: number, k: number) => {
+              const state = get();
+              const row = state.components && state.components[i];
+              if (!row) {
+                return null;
+              }
+
+              const button = row.components && row.components[j];
+              if (!button || button.type == 3 || 'url' in button) {
+                return null;
+                
+              }
+              const modals = button.modals && button.modals[k];
+              return modals;
             },
           }),
           {

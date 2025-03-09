@@ -53,6 +53,8 @@ const buttons = useCurrentMessageStore(
     add(rowIndex, compIndex, {
       id: getUniqueId(),
       name: "",
+      placeholder: "",
+      value: "",
       style: 1,
     });
   }

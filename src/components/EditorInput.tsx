@@ -12,7 +12,7 @@ interface Props {
   description?: string;
   onChange: (value: string) => void;
   maxLength?: number;
-  type?: "text" | "url" | "textarea";
+  type?: "text" | "url" | "textarea" | "number";
   props?: Record<string, any>;
   className?: string;
   validationPath?: string;

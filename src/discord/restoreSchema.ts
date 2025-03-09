@@ -245,8 +245,9 @@ export const buttonStyleSchema = z
   export const buttonModalSchema = z.object({
     id: uniqueIdSchema.default(() => getUniqueId()),
     name: z.string().max(100).default(""),
-    placeholder: z.optional(z.string().min(1).max(100)),
-    style: z.literal(1).or(z.literal(2)).or(z.literal(3)).or(z.literal(4)).default(1),
+    placeholder: z.string().max(100).default(""),
+    value: z.string().max(100).default(""),
+    style: z.literal(1).or(z.literal(2)).default(1),
     required: z.optional(z.boolean()),
     minLength: z.optional(z.number().max(1000)),
     maxLength: z.optional(z.number().max(1000)),
