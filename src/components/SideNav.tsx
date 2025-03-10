@@ -63,7 +63,7 @@ export default function SideNav() {
           <div
             className={clsx("flex flex-col py-5", collapsed && "items-center")}
           >
-            <div className="justify-end px-3 hidden xl:flex">
+            {/* <div className="justify-end px-3 hidden xl:flex">
               <div
                 className="mb-5 cursor-pointer text-gray-300 hover:text-white"
                 role="button"
@@ -75,7 +75,7 @@ export default function SideNav() {
                   <ChevronDoubleLeftIcon className="h-6 w-6" />
                 )}
               </div>
-            </div>
+            </div> */}
             <div className="mb-7">
               {user && user.success ? (
                 <NavigationGuildSelect collapsed={collapsed} />
