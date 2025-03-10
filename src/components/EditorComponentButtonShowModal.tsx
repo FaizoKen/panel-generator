@@ -43,10 +43,6 @@ export default function EditorComponentSelectMenuOption({
     shallow
   );
 
-  const setLabel = useCurrentMessageStore(
-    (state) => state.setSelectMenuOptionLabel
-  );
-
   const setName = useCurrentMessageStore((state) => state.setModalName);
 
   const setPlaceholder = useCurrentMessageStore(
@@ -91,127 +87,142 @@ export default function EditorComponentSelectMenuOption({
   const inputType = style === 2 ? "textarea" : "text";
 
   return (
-    <div className="border border-dark-6 rounded-lg p-4 bg-dark-8 shadow-md">
-      <Collapsable
-        id={`components.${rowId}.select.${compId}.modals.${modalId}`}
-        valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}`}
-        title={`Modal ${modalIndex + 1}`}
-        extra={
-          modal.name && (
-            <div className="text-gray-500 truncate flex items-center space-x-2">
-              <span>-</span>
-              <span className="truncate">{modal.name}</span>
-            </div>
-          )
-        }
-        buttons={
-          <div className="flex items-center space-x-3">
-            {modalIndex > 0 && (
-              <ChevronUpIcon
-                className="h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
-                role="button"
-                onClick={() => moveUp(rowIndex, compIndex, modalIndex)}
-              />
-            )}
-            {modalIndex < modalCount - 1 && (
-              <ChevronDownIcon
-                className="h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
-                role="button"
-                onClick={() => moveDown(rowIndex, compIndex, modalIndex)}
-              />
-            )}
-            {modalCount < 25 && (
-              <DocumentDuplicateIcon
-                className="h-5 w-5 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
-                role="button"
-                onClick={() => duplicate(rowIndex, compIndex, modalIndex)}
-              />
-            )}
-            <TrashIcon
-              className="h-5 w-5 text-red-400 hover:text-red-500 transition-colors cursor-pointer"
-              role="button"
-              onClick={() => remove(rowIndex, compIndex, modalIndex)}
-            />
-          </div>
-        }
-      >
-        <div className="space-y-4">
-          <EditorInput
-            label="Name"
-            maxLength={80}
-            value={modal.name}
-            onChange={(v) => setName(rowIndex, compIndex, modalIndex, v)}
-            className="flex-auto"
-            validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.name`}
+<div className="border border-dark-6 rounded-lg p-4 bg-dark-8 shadow-md">
+  <Collapsable
+    id={`components.${rowId}.select.${compId}.modals.${modalId}`}
+    valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}`}
+    title={`Modal ${modalIndex + 1}`}
+    extra={
+      modal.name && (
+        <div className="text-gray-500 truncate flex items-center space-x-2">
+          <span>-</span>
+          <span className="truncate">{modal.name}</span>
+        </div>
+      )
+    }
+    buttons={
+      <div className="flex items-center space-x-3">
+        {modalIndex > 0 && (
+          <ChevronUpIcon
+            className="h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
+            role="button"
+            onClick={() => moveUp(rowIndex, compIndex, modalIndex)}
           />
-          <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
-            <div className="flex-1">
-              <label className="block text-gray-300 uppercase text-sm font-medium mb-1">
-                Required
-              </label>
-              <CheckBox
-                checked={disabled ?? false}
-                onChange={(v) => setRequired(rowIndex, compIndex, modalIndex, v)}
-              />
-            </div>
-            <div>
-              <label className="block text-gray-300 uppercase text-sm font-medium mb-1">
-                Style
-              </label>
-              <select
-                className="bg-dark-2 rounded-md p-2 w-full font-light cursor-pointer text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                value={style?.toString()}
-                onChange={(v) =>
-                  setStyle(rowIndex, compIndex, modalIndex, v.target.value)
-                }
-              >
-                <option value="1">Short</option>
-                <option value="2">Paragraph</option>
-              </select>
-            </div>
-            <EditorInput
-              label="Min Length"
-              type="number"
-              value={modal.minLength?.toString() || ""}
-              onChange={(v) =>
-                setminLength(rowIndex, compIndex, modalIndex, Number(v))
-              }
-              className="flex-1"
-              validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.minLength`}
-            />
-            <EditorInput
-              label="Max Length"
-              type="number"
-              value={modal.maxLength?.toString() || ""}
-              onChange={(v) =>
-                setmaxLength(rowIndex, compIndex, modalIndex, Number(v))
-              }
-              className="flex-1"
-              validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.maxLength`}
-            />
-          </div>
+        )}
+        {modalIndex < modalCount - 1 && (
+          <ChevronDownIcon
+            className="h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
+            role="button"
+            onClick={() => moveDown(rowIndex, compIndex, modalIndex)}
+          />
+        )}
+        {modalCount < 25 && (
+          <DocumentDuplicateIcon
+            className="h-5 w-5 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
+            role="button"
+            onClick={() => duplicate(rowIndex, compIndex, modalIndex)}
+          />
+        )}
+        <TrashIcon
+          className="h-5 w-5 text-red-400 hover:text-red-500 transition-colors cursor-pointer"
+          role="button"
+          onClick={() => remove(rowIndex, compIndex, modalIndex)}
+        />
+      </div>
+    }
+  >
+    <div className="space-y-4">
+      <EditorInput
+        label="Name"
+        maxLength={80}
+        value={modal.name}
+        onChange={(v) => setName(rowIndex, compIndex, modalIndex, v)}
+        className="w-full"
+        validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.name`}
+      />
+
+      {/* Min Length and Max Length in one row */}
+      <div className="flex space-x-4">
+        <div className="w-1/2">
           <EditorInput
-            label="Placeholder"
-            type={inputType}
-            maxLength={80}
-            value={modal.placeholder}
+            label="Min Length"
+            type="number"
+            value={modal.minLength?.toString() || ""}
             onChange={(v) =>
-              setPlaceholder(rowIndex, compIndex, modalIndex, v)
+              setminLength(rowIndex, compIndex, modalIndex, Number(v))
             }
-            className="flex-auto"
-            validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.placeholder`}
-          />
-          <EditorInput
-            label="Value"
-            type={inputType}
-            maxLength={80}
-            value={modal.value}
-            onChange={(v) => setValue(rowIndex, compIndex, modalIndex, v)}
-            className="flex-auto"
-            validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.value`}
+            className="w-full"
+            validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.minLength`}
           />
         </div>
-      </Collapsable>
+        <div className="w-1/2">
+          <EditorInput
+            label="Max Length"
+            type="number"
+            value={modal.maxLength?.toString() || ""}
+            onChange={(v) =>
+              setmaxLength(rowIndex, compIndex, modalIndex, Number(v))
+            }
+            className="w-full"
+            validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.maxLength`}
+          />
+        </div>
+      </div>
+
+      {/* Style & Required on the same row */}
+      <div className="flex items-center space-x-4">
+        <div className="w-full">
+          <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
+            Style
+          </div>
+          <select
+            className="bg-dark-2 rounded p-2 w-full no-ring font-light cursor-pointer text-white"
+            value={style?.toString()}
+            onChange={(e) =>
+              setStyle(rowIndex, compIndex, modalIndex, e.target.value)
+            }
+          >
+            <option value="1">Short</option>
+            <option value="2">Paragraph</option>
+          </select>
+        </div>
+        <div>
+          <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
+            Required
+          </div>
+          <CheckBox
+            checked={disabled ?? false}
+            onChange={(v) => setRequired(rowIndex, compIndex, modalIndex, v)}
+          />
+        </div>
+      </div>
+
+      <EditorInput
+        label="Placeholder"
+        type={inputType}
+        maxLength={80}
+        value={modal.placeholder}
+        onChange={(v) =>
+          setPlaceholder(rowIndex, compIndex, modalIndex, v)
+        }
+        className="w-full"
+        validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.placeholder`}
+      />
+
+      <EditorInput
+        label="Value"
+        type={inputType}
+        maxLength={80}
+        value={modal.value}
+        onChange={(v) => setValue(rowIndex, compIndex, modalIndex, v)}
+        className="w-full"
+        validationPath={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}.value`}
+      />
     </div>
+  </Collapsable>
+</div>
+
+
+
   );
 }

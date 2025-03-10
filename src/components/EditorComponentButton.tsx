@@ -197,6 +197,7 @@ const buttons = useCurrentMessageStore(
               />
             </div>
           </div>
+          
           <div className="flex space-x-3">
             <EditorComponentEmojiSelect
               emoji={emoji ?? undefined}
