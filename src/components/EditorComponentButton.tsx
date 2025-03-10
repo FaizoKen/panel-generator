@@ -225,7 +225,7 @@ const buttons = useCurrentMessageStore(
             <Collapsable
                     id={`components.${rowId}.select.${compId}.modals`}
                     valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.modals`}
-                    title="Show Modals"
+                    title="Show Forms"
                   >
                     <AutoAnimate className="space-y-2">
                       {buttons.map((id, i) => (
@@ -247,21 +247,21 @@ const buttons = useCurrentMessageStore(
                           className="bg-blurple px-3 py-2 rounded transition-colors hover:bg-blurple-dark text-white"
                           onClick={addModal}
                         >
-                          Add Modal
+                          Add Form
                         </button>
                       ) : (
                         <button
                           disabled
                           className="bg-dark-2 px-3 py-2 rounded transition-colors cursor-not-allowed text-gray-300"
                         >
-                          Add Modal
+                          Add Form
                         </button>
                       )}
                       <button
                         className="px-3 py-2 rounded border-2 border-red hover:bg-red transition-colors text-white"
                         onClick={() => clearModals(rowIndex, compIndex)}
                       >
-                        Clear Modal
+                        Clear Forms
                       </button>
                     </div>
                   </Collapsable>

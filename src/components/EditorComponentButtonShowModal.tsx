@@ -91,7 +91,7 @@ export default function EditorComponentSelectMenuOption({
   <Collapsable
     id={`components.${rowId}.select.${compId}.modals.${modalId}`}
     valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}`}
-    title={`Modal ${modalIndex + 1}`}
+    title={`Form ${modalIndex + 1}`}
     extra={
       modal.name && (
         <div className="text-gray-500 truncate flex items-center space-x-2">
