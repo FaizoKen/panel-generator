@@ -246,7 +246,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                                 }`}
                                 key={comp.id}
                                 target="_blank"
-                                href={comp.url}
+                                // href={comp.url}
                                 rel="noreferrer"
                               >
                                 {comp.emoji &&

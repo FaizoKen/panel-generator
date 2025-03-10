@@ -35,7 +35,7 @@ function App() {
       <ActivityLoadingScreen />
       <UpsellPopup />
       <ConfirmOnExit />
-      <div className="flex h-full">
+      <div className="flex h-full xl:px-48">
         <EditorSideNav />
         <Routes>
           <Route path="/editor" element={<EditorView />}>
