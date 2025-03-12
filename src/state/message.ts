@@ -244,9 +244,6 @@ export const defaultMessage: Message = {
       "id": 3,
       "title": "Need Assistance? Here's How to Reach Support",
       "color": 5868222,
-      "image": {
-        "url": "https://imgur.com/N3IjNdA.png"
-      },
       "fields": [
         {
           "id": 351957694,
