@@ -79,7 +79,8 @@ export default function MessagePreview({ msg }: { msg: Message }) {
 
               <div className="discord-message-compact-indent">
                 {msg.embeds &&
-                  msg.embeds.map((embed) => {
+                  msg.embeds
+                  .map((embed) => {
                     let inlineFieldIndex = 0;
                     const hexColor = embed.color
                       ? colorIntToHex(embed.color)

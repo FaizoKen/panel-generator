@@ -68,7 +68,7 @@ export default function EditorComponentSelectMenu({
         />
         <div className="flex-none">
           <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
-            Disabled
+            Hidden
           </div>
           <CheckBox
             checked={selectMenu.disabled ?? false}

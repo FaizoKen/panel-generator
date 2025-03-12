@@ -74,21 +74,21 @@ export default function EditorEmbed({ embedIndex, embedId }: Props) {
           <div className="flex-none text-gray-300 flex items-center space-x-2">
             {embedIndex > 0 && (
               <ChevronUpIcon
-                className="h-6 w-6 flex-none"
+                className="h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
                 role="button"
                 onClick={() => moveUp(embedIndex)}
               />
             )}
             {embedIndex < embedCount - 1 && (
               <ChevronDownIcon
-                className="h-6 w-6 flex-none"
+                className="h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
                 role="button"
                 onClick={() => moveDown(embedIndex)}
               />
             )}
             {embedCount < 10 && (
               <DocumentDuplicateIcon
-                className="h-5 w-5 flex-none"
+                className="h-5 w-5 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
                 role="button"
                 onClick={() => duplicate(embedIndex)}
               />

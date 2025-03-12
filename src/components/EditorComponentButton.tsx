@@ -107,7 +107,7 @@ const buttons = useCurrentMessageStore(
     shallow
   );
 
-  const actionSetId = useCurrentMessageStore(
+  const action = useCurrentMessageStore(
     (state) => state.getButton(rowIndex, compIndex)?.action_set_id || ""
   );
 
@@ -119,101 +119,130 @@ const buttons = useCurrentMessageStore(
   const borderColor = buttonBorderColors[style];
 
   return (
-    <div
-      className={`bg-dark-3 px-3 md:px-4 py-3 mb-3 rounded-md shadow border-2 ${borderColor}`}
-    >
-      <Collapsable
-        id={`components.${rowId}.buttons.${compId}`}
-        valiationPathPrefix={`components.${rowIndex}.components.${compIndex}`}
-        title={`Button ${compIndex + 1}`}
-        extra={
-          label && (
-            <div className="text-gray-500 truncate flex space-x-2 pl-2">
-              <div>-</div>
-              <div className="truncate">{label}</div>
+<div
+  className={`bg-dark-3 px-3 md:px-4 py-3 mb-3 rounded-md shadow border-2 ${borderColor}`}
+>
+  <Collapsable
+    id={`components.${rowId}.buttons.${compId}`}
+    collapsable={action === "form"}
+    valiationPathPrefix={`components.${rowIndex}.components.${compIndex}`}
+    title={
+      action === "form"
+        ? "Tickets"
+        : action === "rule"
+        ? "Server Rules"
+        : action === "setting"
+        ? "Panel Settings"
+        : `Button ${compIndex + 1}`
+    }
+    extra={
+      action === "form" &&
+      label && (
+        <div className="text-gray-500 truncate flex space-x-2 pl-2">
+          <div>-</div>
+          <div className="truncate">{label}</div>
+        </div>
+      )
+    }
+    
+    buttons={
+      <div className="flex-none text-gray-300 flex items-center space-x-2">
+        <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
+          Hidden
+        </div>
+        <CheckBox
+          checked={disabled ?? false}
+          onChange={(v) => setDisabled(rowIndex, compIndex, v)}
+        />
+      </div>
+    }
+  >
+    {action === "form" && (
+      <div className="space-y-4">
+        <div className="flex space-x-3">
+          <div className="flex-auto">
+            <div className="mb-1.5 flex">
+              <div className="uppercase text-gray-300 text-sm font-medium">
+                Style
+              </div>
             </div>
-          )
-        }
-        buttons={
-          <div className="flex-none text-gray-300 flex items-center space-x-2">
-            {compIndex > 0 && (
-              <ChevronUpIcon
-                className="h-6 w-6 flex-none"
-                role="button"
-                onClick={() => moveUp(rowIndex, compIndex)}
-              />
-            )}
-            {compIndex < buttonCount - 1 && (
-              <ChevronDownIcon
-                className="h-6 w-6 flex-none"
-                role="button"
-                onClick={() => moveDown(rowIndex, compIndex)}
-              />
-            )}
-            {buttonCount < 5 && (
-              <DocumentDuplicateIcon
-                className="h-5 w-5 flex-none"
-                role="button"
-                onClick={() => duplicate(rowIndex, compIndex)}
-              />
-            )}
-            <TrashIcon
-              className="h-5 w-5 flex-none"
-              role="button"
-              onClick={() => remove(rowIndex, compIndex)}
-            />
+            <select
+              className="bg-dark-2 rounded p-2 w-full no-ring font-light cursor-pointer text-white"
+              value={style.toString()}
+              onChange={(v) =>
+                setStyle(rowIndex, compIndex, parseInt(v.target.value) as any)
+              }
+            >
+              <option value="1">Blurple</option>
+              <option value="2">Grey</option>
+              <option value="3">Green</option>
+              <option value="4">Red</option>
+              <option value="5">Direct Link</option>
+            </select>
           </div>
-        }
-      >
-        <div className="space-y-4">
-          <div className="flex space-x-3">
-            <div className="flex-auto">
-              <div className="mb-1.5 flex">
-                <div className="uppercase text-gray-300 text-sm font-medium">
-                  Style
+        </div>
+
+        <div className="flex space-x-3">
+          <EditorComponentEmojiSelect
+            emoji={emoji ?? undefined}
+            onChange={(v) => setEmoji(rowIndex, compIndex, v)}
+          />
+          <EditorInput
+            label="Label"
+            maxLength={80}
+            value={label}
+            onChange={(v) => setLabel(rowIndex, compIndex, v)}
+            className="flex-auto"
+            validationPath={`components.${rowIndex}.components.${compIndex}.label`}
+          />
+        </div>
+
+        {action === "form" ? (
+          <Collapsable
+            id={`components.${rowId}.select.${compId}.modals`}
+            valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.modals`}
+            title="Show Forms"
+          >
+            <AutoAnimate className="space-y-2">
+              {buttons.map((id, i) => (
+                <div key={id}>
+                  <EditorComponentButtonShowModal
+                    rowIndex={rowIndex}
+                    rowId={rowId}
+                    compIndex={compIndex}
+                    compId={compId}
+                    modalIndex={i}
+                    modalId={id}
+                  />
                 </div>
-              </div>
-              <select
-                className="bg-dark-2 rounded p-2 w-full no-ring font-light cursor-pointer text-white"
-                value={style.toString()}
-                onChange={(v) =>
-                  setStyle(rowIndex, compIndex, parseInt(v.target.value) as any)
-                }
+              ))}
+            </AutoAnimate>
+            <div className="space-x-3 mt-3">
+              {buttons.length < 5 ? (
+                <button
+                  className="bg-blurple px-3 py-2 rounded transition-colors hover:bg-blurple-dark text-white"
+                  onClick={addModal}
+                >
+                  Add Form
+                </button>
+              ) : (
+                <button
+                  disabled
+                  className="bg-dark-2 px-3 py-2 rounded transition-colors cursor-not-allowed text-gray-300"
+                >
+                  Add Form
+                </button>
+              )}
+              <button
+                className="px-3 py-2 rounded border-2 border-red hover:bg-red transition-colors text-white"
+                onClick={() => clearModals(rowIndex, compIndex)}
               >
-                <option value="1">Blurple</option>
-                <option value="2">Grey</option>
-                <option value="3">Green</option>
-                <option value="4">Red</option>
-                <option value="5">Direct Link</option>
-              </select>
+                Clear Forms
+              </button>
             </div>
-            <div className="flex-none">
-              <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
-                Disabled
-              </div>
-              <CheckBox
-                checked={disabled ?? false}
-                onChange={(v) => setDisabled(rowIndex, compIndex, v)}
-              />
-            </div>
-          </div>
-          
-          <div className="flex space-x-3">
-            <EditorComponentEmojiSelect
-              emoji={emoji ?? undefined}
-              onChange={(v) => setEmoji(rowIndex, compIndex, v)}
-            />
-            <EditorInput
-              label="Label"
-              maxLength={80}
-              value={label}
-              onChange={(v) => setLabel(rowIndex, compIndex, v)}
-              className="flex-auto"
-              validationPath={`components.${rowIndex}.components.${compIndex}.label`}
-            />
-            </div>
-          
-          {style === 5 ? (
+          </Collapsable>
+        ) : (
+          style === 5 && (
             <EditorInput
               label="URL"
               type="url"
@@ -221,54 +250,13 @@ const buttons = useCurrentMessageStore(
               onChange={(v) => setUrl(rowIndex, compIndex, v)}
               validationPath={`components.${rowIndex}.components.${compIndex}.url`}
             />
-          ) : (
-            <Collapsable
-                    id={`components.${rowId}.select.${compId}.modals`}
-                    valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.modals`}
-                    title="Show Forms"
-                  >
-                    <AutoAnimate className="space-y-2">
-                      {buttons.map((id, i) => (
-                        <div key={id}>
-                          <EditorComponentButtonShowModal
-                            rowIndex={rowIndex}
-                            rowId={rowId}
-                            compIndex={compIndex}
-                            compId={compId}
-                            modalIndex={i}
-                            modalId={id}
-                          />
-                        </div>
-                      ))}
-                    </AutoAnimate>
-                    <div className="space-x-3 mt-3">
-                      {buttons.length < 5 ? (
-                        <button
-                          className="bg-blurple px-3 py-2 rounded transition-colors hover:bg-blurple-dark text-white"
-                          onClick={addModal}
-                        >
-                          Add Form
-                        </button>
-                      ) : (
-                        <button
-                          disabled
-                          className="bg-dark-2 px-3 py-2 rounded transition-colors cursor-not-allowed text-gray-300"
-                        >
-                          Add Form
-                        </button>
-                      )}
-                      <button
-                        className="px-3 py-2 rounded border-2 border-red hover:bg-red transition-colors text-white"
-                        onClick={() => clearModals(rowIndex, compIndex)}
-                      >
-                        Clear Forms
-                      </button>
-                    </div>
-                  </Collapsable>
-          )}
-                      
-        </div>
-      </Collapsable>
-    </div>
+          )
+        )}
+      </div>
+    )}
+  </Collapsable>
+</div>
+
+
   );
 }

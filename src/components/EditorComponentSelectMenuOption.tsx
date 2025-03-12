@@ -96,6 +96,7 @@ export default function EditorComponentSelectMenuOption({
       <Collapsable
         id={`components.${rowId}.select.${compId}.options.${optionId}`}
         valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.options.${optionIndex}`}
+        defaultCollapsed={true}
         title={`Option ${optionIndex + 1}`}
         extra={
           option.label && (
@@ -109,21 +110,21 @@ export default function EditorComponentSelectMenuOption({
           <div className="flex-none text-gray-300 flex items-center space-x-2">
             {optionIndex > 0 && (
               <ChevronUpIcon
-                className="h-6 w-6 flex-none"
+                className="h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
                 role="button"
                 onClick={() => moveUp(rowIndex, compIndex, optionIndex)}
               />
             )}
             {optionIndex < optionCount - 1 && (
               <ChevronDownIcon
-                className="h-6 w-6 flex-none"
+                className="h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
                 role="button"
                 onClick={() => moveDown(rowIndex, compIndex, optionIndex)}
               />
             )}
             {optionCount < 25 && (
               <DocumentDuplicateIcon
-                className="h-5 w-5 flex-none"
+                className="h-5 w-5 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
                 role="button"
                 onClick={() => duplicate(rowIndex, compIndex, optionIndex)}
               />

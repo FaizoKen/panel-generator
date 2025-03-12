@@ -46,46 +46,8 @@ export default function EditorComponentRow({ rowIndex, rowId }: Props) {
       <Collapsable
         id={`components.${rowId}`}
         valiationPathPrefix={`components.${rowIndex}.components`}
-        title={`Row ${rowIndex + 1}`}
+        title={isButtonRow ? "Buttons" : "Select Menu"}
         size="large"
-        buttons={
-          <div className="flex-none text-gray-300 flex items-center space-x-2">
-            {rowIndex > 0 && (
-              <ChevronUpIcon
-                className="h-6 w-6 flex-none"
-                role="button"
-                onClick={() => moveUp(rowIndex)}
-              />
-            )}
-            {rowIndex < rowCount - 1 && (
-              <ChevronDownIcon
-                className="h-6 w-6 flex-none"
-                role="button"
-                onClick={() => moveDown(rowIndex)}
-              />
-            )}
-            {rowCount < 10 && (
-              <DocumentDuplicateIcon
-                className="h-5 w-5 flex-none"
-                role="button"
-                onClick={() => duplicate(rowIndex)}
-              />
-            )}
-            <TrashIcon
-              className="h-5 w-5 flex-none"
-              role="button"
-              onClick={() => remove(rowIndex)}
-            />
-          </div>
-        }
-        extra={
-          <div className="text-gray-500 truncate flex space-x-2 pl-2">
-            <div>-</div>
-            <div className="truncate">
-              {isButtonRow ? "Button Row" : "Select Menu Row"}
-            </div>
-          </div>
-        }
       >
         <AutoAnimate>
           {components.map((id, i) =>
@@ -107,7 +69,7 @@ export default function EditorComponentRow({ rowIndex, rowId }: Props) {
               ></EditorComponentSelectMenu>
             )
           )}
-          {isButtonRow && (
+          {/* {isButtonRow && (
             <div>
               <div className="space-x-3 mt-3">
                 {components.length < 5 ? (
@@ -142,7 +104,7 @@ export default function EditorComponentRow({ rowIndex, rowId }: Props) {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
         </AutoAnimate>
       </Collapsable>
     </div>

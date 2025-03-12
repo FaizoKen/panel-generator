@@ -75,21 +75,21 @@ export default function EditorEmbedField({
           <div className="flex-none text-gray-300 flex items-center space-x-2">
             {fieldIndex > 0 && (
               <ChevronUpIcon
-                className="h-6 w-6 flex-none"
+                className="h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
                 role="button"
                 onClick={() => moveUp(embedIndex, fieldIndex)}
               />
             )}
             {fieldIndex < fieldCount - 1 && (
               <ChevronDownIcon
-                className="h-6 w-6 flex-none"
+                className="h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
                 role="button"
                 onClick={() => moveDown(embedIndex, fieldIndex)}
               />
             )}
             {fieldCount < 25 && (
               <DocumentDuplicateIcon
-                className="h-5 w-5 flex-none"
+                className="h-5 w-5 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
                 role="button"
                 onClick={() => duplicate(embedIndex, fieldIndex)}
               />

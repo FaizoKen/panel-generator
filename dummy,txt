@@ -1,0 +1,4 @@
+        defaultCollapsed={true}
+        hover:text-blue-400
+
+        h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer

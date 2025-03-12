@@ -267,10 +267,7 @@ export const buttonSchema = z
     label: z.preprocess((d) => d ?? undefined, z.string().default("")),
     emoji: z.optional(z.nullable(emojiSchema)),
     disabled: z.preprocess((d) => d ?? undefined, z.optional(z.boolean())),
-    action_set_id: z.preprocess(
-      (d) => d ?? undefined,
-      z.string().default(() => getUniqueId().toString())
-    ),
+    action_set_id: z.preprocess( (d) => d ?? undefined, z.string().default(() => getUniqueId().toString()) ),
     modals: z.array(buttonModalSchema).max(5).default([]),
   })
   .or(

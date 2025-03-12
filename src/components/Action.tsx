@@ -177,27 +177,27 @@ export default function Action({
           <div className="flex-none text-gray-300 flex items-center space-x-2">
             {actionIndex > 0 && (
               <ChevronUpIcon
-                className="h-6 w-6 flex-none"
+                className="h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
                 role="button"
                 onClick={moveUp}
               />
             )}
             {actionIndex < actionCount - 1 && (
               <ChevronDownIcon
-                className="h-6 w-6 flex-none"
+                className="h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
                 role="button"
                 onClick={moveDown}
               />
             )}
             {actionCount < maxActions && (
               <DocumentDuplicateIcon
-                className="h-5 w-5 flex-none"
+                className="h-5 w-5 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
                 role="button"
                 onClick={duplicate}
               />
             )}
             <TrashIcon
-              className="h-5 w-5 flex-none"
+              className="h-5 w-5 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
               role="button"
               onClick={remove}
             />

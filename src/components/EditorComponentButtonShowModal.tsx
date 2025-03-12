@@ -91,6 +91,7 @@ export default function EditorComponentSelectMenuOption({
   <Collapsable
     id={`components.${rowId}.select.${compId}.modals.${modalId}`}
     valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.modals.${modalIndex}`}
+    defaultCollapsed={true}
     title={`Form ${modalIndex + 1}`}
     extra={
       modal.name && (
@@ -124,7 +125,7 @@ export default function EditorComponentSelectMenuOption({
           />
         )}
         <TrashIcon
-          className="h-5 w-5 text-red-400 hover:text-red-500 transition-colors cursor-pointer"
+          className="h-5 w-5 flex-none"
           role="button"
           onClick={() => remove(rowIndex, compIndex, modalIndex)}
         />

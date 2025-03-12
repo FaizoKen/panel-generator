@@ -112,8 +112,7 @@ I don't think this is used anywhere, but I'm keeping it here just in case.
 }
 
 .discord-button.discord-button-disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
+  display: none;
 }
 
 .discord-button .discord-button-launch {
@@ -145,8 +144,7 @@ I don't think this is used anywhere, but I'm keeping it here just in case.
 }
 
 .discord-select-menu-disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
+  display: none;
 }
 
 .discord-select-menu-placeholder {
@@ -441,6 +439,7 @@ I don't think this is used anywhere, but I'm keeping it here just in case.
 
 .discord-embed .discord-embed-wrapper {
   background-color: #2f3136;
+  min-width: 432px;
   max-width: 432px;
   border: 1px solid rgba(46, 48, 54, 0.6);
   border-radius: 0 4px 4px 0;

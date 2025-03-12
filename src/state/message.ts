@@ -223,7 +223,7 @@ export const defaultMessage: Message = {
   "tts": false,
   "embeds": [
     {
-      "id": 257353416,
+      "id": 1,
       "color": 3447003,
       "author": {
         "name": "HoYoMY Community",
@@ -235,7 +235,12 @@ export const defaultMessage: Message = {
       "fields": []
     },
     {
-      "id": 230688175,
+      "id": 2,
+      "description": " ",
+      "fields": []
+    },
+    {
+      "id": 3,
       "title": "Need Assistance? Here's How to Reach Support",
       "color": 3447003,
       "image": {
@@ -276,7 +281,7 @@ export const defaultMessage: Message = {
           "id": 551260849,
           "name": "​",
           "value": "​",
-          "inline": true
+          "inline": false
         }
       ]
     }
@@ -347,8 +352,16 @@ export const defaultMessage: Message = {
             "animated": false
           },
           "disabled": false,
-          "action_set_id": "msg-button-be9204c",
-          "modals": []
+          "action_set_id": "form",
+          "modals": [
+            {
+              "id": 175283048,
+              "name": "Test",
+              "placeholder": "",
+              "value": "",
+              "style": 1
+            }
+          ]
         },
         {
           "id": 587113640,
@@ -361,7 +374,7 @@ export const defaultMessage: Message = {
           },
           "url": "https://discord.com/channels/758304326988464179/759335206380371968",
           "disabled": false,
-          "action_set_id": ""
+          "action_set_id": "rule"
         },
         {
           "id": 273509432,
@@ -373,7 +386,7 @@ export const defaultMessage: Message = {
             "animated": false
           },
           "disabled": false,
-          "action_set_id": "msg-button-4657595",
+          "action_set_id": "setting",
           "modals": []
         }
       ]
@@ -389,13 +402,13 @@ export const defaultMessage: Message = {
     "3": {
       "actions": []
     },
-    "msg-button-be9204c": {
+    "form": {
       "actions": []
     },
-    "": {
+    "rule": {
       "actions": []
     },
-    "msg-button-4657595": {
+    "setting": {
       "actions": []
     }
   },

@@ -14,13 +14,15 @@ interface Props {
   size?: "medium" | "large";
   valiationPathPrefix?: string | string[];
   defaultCollapsed?: boolean;
+  collapsable?: boolean; // Add collapsable prop
 }
 
 export default function Collapsable({
   id,
+  collapsable = true, // Default to true
   children,
   title,
-  size,
+  size = "medium",
   extra,
   buttons,
   valiationPathPrefix,
@@ -28,25 +30,28 @@ export default function Collapsable({
 }: Props) {
   const [collapsed, toggleCollapsed] = useCollapsedState(id, defaultCollapsed);
 
-  if (!size) {
-    size = "medium";
-  }
-
   return (
     <div>
-      <div className="flex items-center text-gray-300 cursor-pointer truncate space-x-3">
+      <div
+        className={clsx(
+          "flex items-center text-gray-300 truncate space-x-3",
+          collapsable && "cursor-pointer"
+        )}
+      >
         <div
           className="flex items-center flex-auto truncate space-x-1"
-          onClick={() => toggleCollapsed()}
+          onClick={collapsable ? () => toggleCollapsed() : undefined} // Disable click if not collapsable
         >
-          <ChevronRightIcon
-            className={clsx(
-              "transition-transform duration-300",
-              !collapsed && "rotate-90",
-              size === "large" && "w-7 h-7",
-              size === "medium" && "w-6 h-6"
-            )}
-          />
+          {collapsable && (
+            <ChevronRightIcon
+              className={clsx(
+                "transition-transform duration-300",
+                !collapsed && "rotate-90",
+                size === "large" && "w-7 h-7",
+                size === "medium" && "w-6 h-6"
+              )}
+            />
+          )}
           <div className={clsx("flex-none", size === "large" && "text-lg")}>
             {title}
           </div>
@@ -59,9 +64,11 @@ export default function Collapsable({
         </div>
         <div className="flex-none">{buttons}</div>
       </div>
-      <AutoAnimate>
-        {!collapsed && <div className="mt-3">{children}</div>}
-      </AutoAnimate>
+      {collapsable && (
+        <AutoAnimate>
+          {!collapsed && <div className="mt-3">{children}</div>}
+        </AutoAnimate>
+      )}
     </div>
   );
 }
