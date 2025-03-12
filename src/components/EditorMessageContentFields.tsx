@@ -13,7 +13,7 @@ export default function EditorMessageContentFields() {
 
   return (
     <div>
-      <div className="flex space-x-3 mb-5">
+      {/* <div className="flex space-x-3 mb-5">
         <div className="w-1/2">
           <EditorInput
             label="Username"
@@ -34,7 +34,7 @@ export default function EditorMessageContentFields() {
             imageUpload={true}
           />
         </div>
-      </div>
+      </div> */}
       <div>
         <EditorInput
           type="textarea"

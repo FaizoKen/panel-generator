@@ -224,7 +224,7 @@ export const defaultMessage: Message = {
   "embeds": [
     {
       "id": 1,
-      "color": 3447003,
+      "color": 5868222,
       "author": {
         "name": "HoYoMY Community",
         "icon_url": "https://cdn.discordapp.com/icons/758304326988464179/a_39111c023a81e676d8bfb9db102e6d24.gif?size=4096"
@@ -237,12 +237,13 @@ export const defaultMessage: Message = {
     {
       "id": 2,
       "description": " ",
+      "color": 5868222,
       "fields": []
     },
     {
       "id": 3,
       "title": "Need Assistance? Here's How to Reach Support",
-      "color": 3447003,
+      "color": 5868222,
       "image": {
         "url": "https://imgur.com/N3IjNdA.png"
       },
@@ -257,6 +258,12 @@ export const defaultMessage: Message = {
           "id": 278423939,
           "name": "🆘 Slash Command",
           "value": "Type `/support` to start a support thread",
+          "inline": true
+        },
+        {
+          "id": 551260849,
+          "name": "🌐 Website",
+          "value": "[Click Here](example) to contact support anonymously",
           "inline": true
         },
         {
@@ -276,12 +283,6 @@ export const defaultMessage: Message = {
           "name": "💬 Report Message",
           "value": "Right-click a message and choose **Report Message**",
           "inline": true
-        },
-        {
-          "id": 551260849,
-          "name": "​",
-          "value": "​",
-          "inline": false
         }
       ]
     }
@@ -372,7 +373,7 @@ export const defaultMessage: Message = {
             "name": "📋",
             "animated": false
           },
-          "url": "https://discord.com/channels/758304326988464179/759335206380371968",
+          "url": "https://discord.com",
           "disabled": false,
           "action_set_id": "rule"
         },
@@ -655,11 +656,14 @@ export const createMessageStore = (key: string) =>
             },
             setEmbedColor: (i: number, color: number | undefined) => {
               set((state) => {
-                if (state.embeds && state.embeds[i]) {
-                  state.embeds[i].color = color;
+                if (state.embeds) {
+                  state.embeds.forEach((embed) => {
+                    embed.color = color;
+                  });
                 }
               });
             },
+            
             setEmbedTimestamp: (i: number, timestamp: string | undefined) => {
               set((state) => {
                 if (state.embeds && state.embeds[i]) {
