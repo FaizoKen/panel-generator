@@ -1,6 +1,5 @@
 import { shallow } from "zustand/shallow";
 import { useCurrentMessageStore } from "../state/message";
-import Collapsable from "./Collapsable";
 import CheckBox from "./CheckBox";
 
 interface Props {
@@ -10,34 +9,24 @@ interface Props {
 
 export default function EditorEmbedAuthor({ embedIndex, embedId }: Props) {
 
-  const [author, setAuthor] = useCurrentMessageStore(
+  const [guide, setGuide] = useCurrentMessageStore(
     (state) => [
-      state.embeds[embedIndex]?.author?.name || null, // Get author name or null
-      state.setEmbedAuthor,
+      state.embeds[embedIndex]?.title || null, // Get author name or null
+      state.setEmbedGuide,
     ],
     shallow
   );
-  const checkAuthor = Boolean(author);
+  const checkGuide = Boolean(guide);
 
   return (
-    <Collapsable
-      title="Community Name"
-      id={`embeds.${embedId}.author`}
-      collapsable={false}
-      valiationPathPrefix={`embeds.${embedIndex}.author`}
-          buttons={
             <div className="flex-none text-gray-300 flex items-center space-x-2">
               <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
                 Hidden
               </div>
               <CheckBox
-                checked={checkAuthor ?? false}
-                onChange={(v) => setAuthor(embedIndex, v)}
+                checked={checkGuide ?? false}
+                onChange={(v) => setGuide(embedIndex, v)}
               />
             </div>
-          }
-    >
-<div></div>
-    </Collapsable>
   );
 }

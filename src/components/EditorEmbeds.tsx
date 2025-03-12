@@ -21,11 +21,6 @@ export default function EditorEmbeds() {
       title="Embeds"
       size="large"
       valiationPathPrefix="embeds"
-      extra={
-        <div className="text-sm italic font-light text-gray-400">
-          {embeds.length} / 10
-        </div>
-      }
     >
       <AutoAnimate className="space-y-3 mb-3">
         {embeds.map((id, i) => (
@@ -34,7 +29,7 @@ export default function EditorEmbeds() {
           </div>
         ))}
       </AutoAnimate>
-      <div className="space-x-3">
+      {/* <div className="space-x-3">
         <button
           className={clsx(
             "px-3 py-2 rounded text-white",
@@ -59,7 +54,7 @@ export default function EditorEmbeds() {
         >
           Clear Embeds
         </button>
-      </div>
+      </div> */}
     </Collapsable>
   );
 }

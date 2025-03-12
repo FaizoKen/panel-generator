@@ -2,18 +2,10 @@ import { useCurrentMessageStore } from "../state/message";
 import EditorEmbedAuthor from "./EditorEmbedAuthor";
 import Collapsable from "./Collapsable";
 import EditorEmbedBody from "./EditorEmbedBody";
-import EditorEmbedFields from "./EditorEmbedFields";
-import {
-  ChevronDownIcon,
-  ChevronUpIcon,
-  DocumentDuplicateIcon,
-  TrashIcon,
-} from "@heroicons/react/20/solid";
+import EditorEmbedGuide from "./EditorEmbedGuide";
 import { shallow } from "zustand/shallow";
 import EditorEmbedImages from "./EditorEmbedImages";
-import EditorEmbedFooter from "./EditorEmbedFooter";
 import { useMemo } from "react";
-import { useCollapsedStatesStore } from "../state/collapsed";
 import { colorIntToHex } from "../util/discord";
 
 interface Props {
@@ -26,7 +18,6 @@ export default function EditorEmbed({ embedIndex, embedId }: Props) {
     const embed = state.embeds[embedIndex];
     return embed.author?.name || embed.title;
   });
-  const embedCount = useCurrentMessageStore((state) => state.embeds.length);
 
   const [moveUp, moveDown, duplicate, remove] = useCurrentMessageStore(
     (state) => [
@@ -46,10 +37,6 @@ export default function EditorEmbed({ embedIndex, embedId }: Props) {
     () => (color !== undefined ? colorIntToHex(color) : "#1f2225"),
     [color]
   );
-
-  function wrappedRemove() {
-    remove(embedIndex);
-  }
 
   return (
     <div
@@ -72,41 +59,22 @@ export default function EditorEmbed({ embedIndex, embedId }: Props) {
         }
         buttons={
           <div className="flex-none text-gray-300 flex items-center space-x-2">
-            {embedIndex > 0 && (
-              <ChevronUpIcon
-                className="h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
-                role="button"
-                onClick={() => moveUp(embedIndex)}
-              />
-            )}
-            {embedIndex < embedCount - 1 && (
-              <ChevronDownIcon
-                className="h-6 w-6 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
-                role="button"
-                onClick={() => moveDown(embedIndex)}
-              />
-            )}
-            {embedCount < 10 && (
-              <DocumentDuplicateIcon
-                className="h-5 w-5 text-gray-300 hover:text-blue-400 transition-colors cursor-pointer"
-                role="button"
-                onClick={() => duplicate(embedIndex)}
-              />
-            )}
-            <TrashIcon
-              className="h-5 w-5 flex-none"
-              role="button"
-              onClick={wrappedRemove}
-            />
           </div>
         }
       >
         <div className="space-y-4">
-          <EditorEmbedAuthor embedIndex={embedIndex} embedId={embedId} />
-          <EditorEmbedBody embedIndex={embedIndex} embedId={embedId} />
-          <EditorEmbedImages embedIndex={embedIndex} embedId={embedId} />
-          <EditorEmbedFooter embedIndex={embedIndex} embedId={embedId} />
-          <EditorEmbedFields embedIndex={embedIndex} embedId={embedId} />
+          {embedId === 1 && (
+            <>
+              <EditorEmbedAuthor embedIndex={embedIndex} embedId={embedId} />
+              <EditorEmbedImages embedIndex={embedIndex} embedId={embedId} />
+            </>
+          )}
+          {embedId === 2 && (
+            <EditorEmbedBody embedIndex={embedIndex} embedId={embedId} />
+          )}
+                    {embedId === 3 && (
+            <EditorEmbedGuide embedIndex={embedIndex} embedId={embedId} />
+          )}
         </div>
       </Collapsable>
     </div>

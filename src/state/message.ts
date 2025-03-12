@@ -17,6 +17,13 @@ import {
 import { getUniqueId } from "../util";
 import { TemporalState, temporal } from "zundo";
 import debounce from "just-debounce-it";
+import { usePanelVarStore } from "./panelvar";
+import { generateGuide } from "../util/guidegen";
+
+const getAuthorData = () => {
+  const author = usePanelVarStore.getState().loc;
+  return author;
+};
 
 export interface MessageStore extends Message {
   clear(): void;
@@ -35,6 +42,8 @@ export interface MessageStore extends Message {
   setEmbedTitle: (i: number, title: string | undefined) => void;
   setEmbedUrl: (i: number, url: string | undefined) => void;
   setEmbedAuthorName: (i: number, name: string) => void;
+  setEmbedAuthor: (i: number, use: boolean | undefined) => void;
+  setEmbedGuide: (i: number, use: boolean | undefined) => void;
   setEmbedAuthorUrl: (i: number, url: string | undefined) => void;
   setEmbedAuthorIconUrl: (i: number, icon_url: string | undefined) => void;
   setEmbedThumbnailUrl: (i: number, url: string | undefined) => void;
@@ -540,6 +549,46 @@ export const createMessageStore = (key: string) =>
                   }
                 }
               }),
+              setEmbedAuthor: (i: number, use: boolean | undefined) =>
+                set((state) => {
+                  const embed = state.embeds?.[i];
+                  if (!embed) return;
+              
+                  if (use) {
+                    const authorInfo = getAuthorData();
+                    embed.author = {
+                      name: authorInfo.guildName,
+                      icon_url: authorInfo.guildIconUrl,
+                    };
+                  } else {
+                    delete embed.author;
+                  }
+                }),
+                setEmbedGuide: (i: number, use: boolean | undefined) =>
+                  set((state) => {
+                    const embed = state.embeds?.[i];
+                    if (!embed) return;
+                
+                    if (use) {
+                      const guideData = generateGuide(); // Get the generated guide
+                
+                      if (guideData.length > 0) {
+                        const firstGuide = guideData[0]; // Use the first guide entry for title & color
+                
+                        embed.title = firstGuide.title;
+                        embed.color = firstGuide.color;
+                        embed.fields = guideData.flatMap((item) => item.fields || []);
+                      }
+                    } else {
+                      // Remove properties from the embed
+                      delete embed.title;
+                      embed.fields = [];
+                    }
+                  }),
+                
+                
+                
+                
             setEmbedAuthorUrl: (i: number, url: string | undefined) =>
               set((state) => {
                 const embed = state.embeds && state.embeds[i];

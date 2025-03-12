@@ -31,20 +31,15 @@ export default function EditorEmbedBody({ embedIndex, embedId }: Props) {
     (state) => [state.embeds[embedIndex]?.color, state.setEmbedColor],
     shallow
   );
+    const [imageUrl, setImageUrl] = useCurrentMessageStore(
+      (state) => [state.embeds[embedIndex]?.image?.url, state.setEmbedImageUrl],
+      shallow
+    );
 
   console.log("render body", embedIndex);
 
   return (
-    <Collapsable
-      id={`embeds.${embedId}.content`}
-      title="Body"
-      valiationPathPrefix={[
-        `embeds.${embedIndex}.title`,
-        `embeds.${embedIndex}.description`,
-        `embeds.${embedIndex}.url`,
-        `embeds.${embedIndex}.color`,
-      ]}
-    >
+<div>
       <div className="space-y-3">
         <EditorInput
           label="Title"
@@ -82,7 +77,15 @@ export default function EditorEmbedBody({ embedIndex, embedId }: Props) {
             <ValidationError path={`embeds.${embedIndex}.color`} />
           </div>
         </div>
+        <EditorInput
+                      label="Image URL"
+                      type="url"
+                      value={imageUrl || ""}
+                      onChange={(v) => setImageUrl(embedIndex, v || undefined)}
+                      validationPath={`embeds.${embedIndex}.image.url`}
+                      imageUpload={true}
+                    />
       </div>
-    </Collapsable>
+      </div>
   );
 }
