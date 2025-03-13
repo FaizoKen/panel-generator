@@ -24,14 +24,31 @@ interface ButtonResponse {
   id: number;
   text: string;
 }
+const int = usePanelVarStore.getState().int;
+
+function replaceVar(content: string): string {
+  return content.replace(/\{\{(.*?)\}\}/g, (match: string, key: string) => {
+    const keys = key.trim().split(".");
+    let value: any = int;
+
+    for (const k of keys) {
+      if (value && typeof value === "object" && k in value) {
+        value = value[k];
+      } else {
+        return match; // If not found, keep the placeholder
+      }
+    }
+    
+    return String(value);
+  });
+}
 
 
 
 export default function MessagePreview({ msg }: { msg: Message }) {
-  const varLoc = usePanelVarStore.getState().loc;
-
-  msg.username = varLoc.botName 
-  msg.avatar_url = varLoc.botIconUrl 
+  const loc = usePanelVarStore.getState().loc;
+  
+  
   const currentTime = format(new Date(), "hh:mm aa");
   const sendMode = useSendSettingsStore((state) => state.mode);
   const [responses, setResponses] = useState<ButtonResponse[]>([]);
@@ -40,10 +57,10 @@ export default function MessagePreview({ msg }: { msg: Message }) {
   const { data: branding } = useGuildBrandingQuery(guildId);
 
   const defaultUsername =
-    (branding?.success && branding.data.default_username) || "Default";
+    (branding?.success && branding.data.default_username) || loc.botName ;
   const defaultAvatarUrl =
     (branding?.success && branding.data.default_avatar_url) ||
-    getRelativeUrl("/logo.svg");
+    loc.botIconUrl ;
 
   return (
     <Twemoji
@@ -75,15 +92,15 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                 Today at {currentTime}
               </span>
               {!!msg.content && (
-                <div className="discord-message-body">
-                  <div
-                    className="discord-message-markup"
-                    dangerouslySetInnerHTML={{
-                      __html: toHTML(msg.content || "", {}),
-                    }}
-                  />
-                </div>
-              )}
+  <div className="discord-message-body">
+    <div
+      className="discord-message-markup"
+      dangerouslySetInnerHTML={{
+        __html: toHTML(replaceVar(msg.content) || "", {}),
+      }}
+    />
+  </div>
+)}
 
               <div className="discord-message-compact-indent">
                 {msg.embeds &&
@@ -159,9 +176,9 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                                 <div className="discord-embed-title overflow-hidden break-all">
                                   {embed.url ? (
                                     <a
-                                      href={embed.url}
+                                    href={replaceVar(embed.url) || "#"} // Fallback to "#" if URL is empty
                                       dangerouslySetInnerHTML={{
-                                        __html: toHTML(embed.title || "", {
+                                        __html: toHTML(replaceVar(embed.title) || "", {
                                           isTitle: true,
                                         }),
                                       }}
@@ -169,7 +186,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                                   ) : (
                                     <span
                                       dangerouslySetInnerHTML={{
-                                        __html: toHTML(embed.title || "", {
+                                        __html: toHTML(replaceVar(embed.title) || "", {
                                           isTitle: true,
                                         }),
                                       }}
@@ -181,7 +198,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                                 <div
                                   className="discord-embed-description"
                                   dangerouslySetInnerHTML={{
-                                    __html: toHTML(embed.description || "", {}),
+                                    __html: toHTML(replaceVar(embed.description) || "", {}),
                                   }}
                                 />
                               )}
@@ -201,14 +218,14 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                                       <div
                                         className="discord-field-title overflow-hidden break-all"
                                         dangerouslySetInnerHTML={{
-                                          __html: toHTML(field.name || "", {
+                                          __html: toHTML(replaceVar(field.name) || "", {
                                             isTitle: true,
                                           }),
                                         }}
                                       />
                                       <div
                                         dangerouslySetInnerHTML={{
-                                          __html: toHTML(field.value, {}),
+                                          __html: toHTML(replaceVar(field.value), {}),
                                         }}
                                       />
                                     </div>
@@ -218,7 +235,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                               {!!embed.image && (
                                 <div className="discord-embed-media">
                                   <img
-                                    src={embed.image.url}
+                                    src={replaceVar(embed.image.url ?? '')}
                                     alt=""
                                     className="discord-embed-image"
                                   />
@@ -226,7 +243,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                               )}
                               {!!embed.thumbnail && (
                                 <img
-                                  src={embed.thumbnail.url}
+                                src={embed.image?.url ? replaceVar(embed.image.url) : ''}
                                   alt=""
                                   className="discord-embed-thumbnail"
                                 />
@@ -336,7 +353,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                                       {comp.emoji.name}
                                     </Twemoji>
                                   ))}
-                                <span>{comp.label}</span>
+                                <span>{replaceVar(comp.label)}</span>
                               </div>
                             )
                           ) : comp.type === 3 ? (
@@ -348,9 +365,10 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                               }`}
                               key={comp.id}
                             >
-                              <span className="discord-select-menu-placeholder">
-                                {comp.placeholder || "Make a selection"}
-                              </span>
+<span className="discord-select-menu-placeholder">
+  {replaceVar(comp.placeholder ?? "Make a selection")}
+</span>
+
                               <svg
                                 className="discord-select-menu-icon"
                                 aria-hidden="true"
