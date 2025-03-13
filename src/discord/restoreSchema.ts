@@ -267,8 +267,7 @@ export const buttonSchema = z
     style: z.literal(1).or(z.literal(2)).or(z.literal(3)).or(z.literal(4)),
     label: z.preprocess((d) => d ?? undefined, z.string().default("")),
     emoji: z.optional(z.nullable(emojiSchema)),
-    disabled: z.preprocess((d) => d ?? undefined, z.optional(z.boolean())),
-    action_set_id: z.preprocess( (d) => d ?? undefined, z.string().default(() => getUniqueId().toString()) ),
+    hidden: z.preprocess((d) => d ?? undefined, z.optional(z.boolean())),
     modals: z.array(buttonModalSchema).max(5).default([]),
   })
   .or(
@@ -279,8 +278,7 @@ export const buttonSchema = z
       label: z.preprocess((d) => d ?? undefined, z.string().default("")),
       emoji: z.optional(z.nullable(emojiSchema)),
       url: z.preprocess((d) => d ?? undefined, z.string().default("")),
-      disabled: z.preprocess((d) => d ?? undefined, z.optional(z.boolean())),
-      action_set_id: z.string().default(() => getUniqueId().toString()),
+      hidden: z.preprocess((d) => d ?? undefined, z.optional(z.boolean())),
     })
   );
 
@@ -292,7 +290,7 @@ export const selectMenuOptionSchema = z.object({
   description: z.preprocess((d) => d || undefined, z.optional(z.string())),
   message_response: z.preprocess( (d) => (d == null ? {} : d), responseSchema ),
   emoji: z.preprocess((d) => d ?? undefined, z.optional(emojiSchema)),
-  action_set_id: z.preprocess( (d) => d ?? undefined, z.string().default(() => getUniqueId().toString()) ), });
+});
 
 export type MessageComponentSelectMenuOption = z.infer<
   typeof selectMenuOptionSchema
@@ -302,7 +300,7 @@ export const selectMenuSchema = z.object({
   id: uniqueIdSchema,
   type: z.literal(3),
   placeholder: z.preprocess((d) => d ?? undefined, z.optional(z.string())),
-  disabled: z.preprocess((d) => d ?? undefined, z.optional(z.boolean())),
+  hidden: z.preprocess((d) => d ?? undefined, z.optional(z.boolean())),
   options: z.preprocess(
     (d) => d ?? undefined,
     z.array(selectMenuOptionSchema).default([])
@@ -395,12 +393,6 @@ export const webhookAvatarUrlSchema = z.preprocess(
 
 export type WebhookAvatarUrl = z.infer<typeof webhookAvatarUrlSchema>;
 
-export const messageTtsSchema = z.preprocess(
-  (d) => d ?? undefined,
-  z.boolean().default(false)
-);
-
-export type MessageTts = z.infer<typeof messageTtsSchema>;
 
 export const messageAllowedMentionsSchema = z.preprocess(
   (d) => d ?? undefined,
@@ -425,7 +417,6 @@ export const messageSchema = z.object({
   ),
   username: webhookUsernameSchema,
   avatar_url: webhookAvatarUrlSchema,
-  tts: messageTtsSchema,
   embeds: z.preprocess((d) => d ?? undefined, z.array(embedSchema).default([])),
   allowed_mentions: messageAllowedMentionsSchema,
   components: z.preprocess(
@@ -433,37 +424,12 @@ export const messageSchema = z.object({
     z.array(actionRowSchema).default([])
   ),
   thread_name: messageThreadName,
-  actions: z.preprocess(
-    (d) => d ?? undefined,
-    z.record(z.string(), messageActionSetSchema).default({})
-  ),
 });
 
 export type Message = z.infer<typeof messageSchema>;
 
 export function parseMessageWithAction(raw: any) {
   const parsedData = messageSchema.parse(raw);
-
-  // create messing action sets
-  for (const row of parsedData.components) {
-    for (const comp of row.components) {
-      if (comp.type === 2) {
-        if (!parsedData.actions[comp.action_set_id]) {
-          parsedData.actions[comp.action_set_id] = {
-            actions: [],
-          };
-        }
-      } else {
-        for (const option of comp.options) {
-          if (!parsedData.actions[option.action_set_id]) {
-            parsedData.actions[option.action_set_id] = {
-              actions: [],
-            };
-          }
-        }
-      }
-    }
-  }
 
   return parsedData;
 }

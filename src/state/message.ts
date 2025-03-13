@@ -229,7 +229,6 @@ export interface MessageStore extends Message {
 
 export const defaultMessage: Message = {
   "content": "",
-  "tts": false,
   "embeds": [
     {
       "id": 1,
@@ -262,7 +261,7 @@ export const defaultMessage: Message = {
           "id": 639385666,
           "type": 3,
           "placeholder": "Frequently Asked Question (FAQ)",
-          "disabled": false,
+          "hidden": false,
           "options": [
             {
               "id": 354268191,
@@ -274,7 +273,6 @@ export const defaultMessage: Message = {
                 "name": "discord",
                 "animated": false
               },
-              "action_set_id": "1"
             },
             {
               "id": 879145037,
@@ -286,7 +284,6 @@ export const defaultMessage: Message = {
                 "name": "discord",
                 "animated": false
               },
-              "action_set_id": "2"
             },
             {
               "id": 784367495,
@@ -298,7 +295,6 @@ export const defaultMessage: Message = {
                 "name": "discord",
                 "animated": false
               },
-              "action_set_id": "3"
             }
           ]
         }
@@ -309,7 +305,7 @@ export const defaultMessage: Message = {
       "type": 1,
       "components": [
         {
-          "id": 3403233,
+          "id": 10,
           "type": 2,
           "style": 1,
           "label": "Contact Support",
@@ -318,8 +314,7 @@ export const defaultMessage: Message = {
             "name": "logo",
             "animated": false
           },
-          "disabled": false,
-          "action_set_id": "form",
+          "hidden": false,
           "modals": [
             {
               "id": 175283048,
@@ -331,7 +326,7 @@ export const defaultMessage: Message = {
           ]
         },
         {
-          "id": 587113640,
+          "id": 11,
           "type": 2,
           "style": 5,
           "label": "Server Rules",
@@ -340,11 +335,10 @@ export const defaultMessage: Message = {
             "animated": false
           },
           "url": "https://discord.com",
-          "disabled": false,
-          "action_set_id": "rule"
+          "hidden": false,
         },
         {
-          "id": 273509432,
+          "id": 12,
           "type": 2,
           "style": 2,
           "label": "",
@@ -352,41 +346,18 @@ export const defaultMessage: Message = {
             "name": "⚙️",
             "animated": false
           },
-          "disabled": false,
-          "action_set_id": "setting",
+          "hidden": false,
           "modals": []
         }
       ]
     }
-  ],
-  "actions": {
-    "1": {
-      "actions": []
-    },
-    "2": {
-      "actions": []
-    },
-    "3": {
-      "actions": []
-    },
-    "form": {
-      "actions": []
-    },
-    "rule": {
-      "actions": []
-    },
-    "setting": {
-      "actions": []
-    }
-  }
+  ]
 };
 
 export const emptyMessage: Message = {
   content: "",
-  tts: false,
   embeds: [],
   components: [],
-  actions: {},
 };
 
 export const createMessageStore = (key: string) =>
@@ -802,10 +773,8 @@ export const createMessageStore = (key: string) =>
                 for (const row of state.components) {
                   for (const comp of row.components) {
                     if (comp.type === 2) {
-                      delete state.actions[comp.action_set_id];
                     } else if (comp.type === 3) {
                       for (const option of comp.options) {
-                        delete state.actions[option.action_set_id];
                       }
                     }
                   }
@@ -845,17 +814,14 @@ export const createMessageStore = (key: string) =>
                   components: row.components.map((comp) => {
                     if (comp.type === 2) {
                       const actionId = getUniqueId().toString();
-                      state.actions[actionId] = { actions: [] };
-                      return { ...comp, action_set_id: actionId };
+                      return { ...comp };
                     } else {
                       return {
                         ...comp,
                         options: comp.options.map((option) => {
                           const actionId = getUniqueId().toString();
-                          state.actions[actionId] = { actions: [] };
                           return {
                             ...option,
-                            action_set_id: actionId,
                           };
                         }),
                       };
@@ -873,10 +839,8 @@ export const createMessageStore = (key: string) =>
                 for (const row of removed) {
                   for (const comp of row.components) {
                     if (comp.type === 2) {
-                      delete state.actions[comp.action_set_id];
                     } else if (comp.type === 3) {
                       for (const option of comp.options) {
-                        delete state.actions[option.action_set_id];
                       }
                     }
                   }
@@ -889,7 +853,6 @@ export const createMessageStore = (key: string) =>
                   return;
                 }
 
-                state.actions[button.action_set_id] = { actions: [] };
 
                 if (!row.components) {
                   row.components = [button];
@@ -906,7 +869,6 @@ export const createMessageStore = (key: string) =>
 
                 for (const button of row.components) {
                   if (button.type === 2) {
-                    delete state.actions[button.action_set_id];
                   }
                 }
 
@@ -922,7 +884,6 @@ export const createMessageStore = (key: string) =>
                 const removed = row.components.splice(j, 1);
                 for (const button of removed) {
                   if (button.type === 2) {
-                    delete state.actions[button.action_set_id];
                   }
                 }
               }),
@@ -964,12 +925,10 @@ export const createMessageStore = (key: string) =>
                 }
 
                 const actionId = getUniqueId().toString();
-                state.actions[actionId] = state.actions[button.action_set_id];
 
                 row.components.splice(j + 1, 0, {
                   ...button,
                   id: getUniqueId(),
-                  action_set_id: actionId,
                 });
               }),
             setButtonStyle: (
@@ -990,7 +949,6 @@ export const createMessageStore = (key: string) =>
                 button.style = style;
                 if (button.style === 5) {
                   button.url = "";
-                  state.actions[button.action_set_id] = { actions: [] };
                 }
               }),
             setButtonLabel: (i: number, j: number, label: string) =>
@@ -1043,7 +1001,7 @@ export const createMessageStore = (key: string) =>
                 if (!button) {
                   return;
                 }
-                button.disabled = disabled;
+                button.hidden = disabled;
               }),
               setModalRequired: (
                 i: number,
@@ -1094,7 +1052,7 @@ export const createMessageStore = (key: string) =>
                 if (!selectMenu || selectMenu.type !== 3) {
                   return;
                 }
-                selectMenu.disabled = disabled;
+                selectMenu.hidden = disabled;
               }),
             addSelectMenuOption: (
               i: number,
@@ -1111,7 +1069,6 @@ export const createMessageStore = (key: string) =>
                   return;
                 }
 
-                state.actions[option.action_set_id] = { actions: [] };
 
                 if (!selectMenu.options) {
                   selectMenu.options = [option];
@@ -1153,7 +1110,6 @@ export const createMessageStore = (key: string) =>
                 }
 
                 for (const option of selectMenu.options) {
-                  delete state.actions[option.action_set_id];
                 }
 
                 selectMenu.options = [];
@@ -1257,12 +1213,10 @@ export const createMessageStore = (key: string) =>
                 }
 
                 const actionId = getUniqueId().toString();
-                state.actions[actionId] = state.actions[option.action_set_id];
 
                 selectMenu.options.splice(k + 1, 0, {
                   ...option,
                   id: getUniqueId(),
-                  action_set_id: actionId,
                 });
               }),
               duplicateButtonModal: (i: number, j: number, k: number) =>
@@ -1290,7 +1244,6 @@ export const createMessageStore = (key: string) =>
 
                 const removed = selectMenu.options.splice(k, 1);
                 for (const option of removed) {
-                  delete state.actions[option.action_set_id];
                 }
               }),
               deleteButtonModal: (i: number, j: number, k: number) =>
@@ -1582,140 +1535,35 @@ export const createMessageStore = (key: string) =>
               }),
             addAction: (id: string, action: MessageAction) =>
               set((state) => {
-                const actionSet = state.actions[id];
-                if (actionSet) {
-                  actionSet.actions.push(action);
-                } else {
-                  state.actions[id] = { actions: [action] };
-                }
               }),
             clearActions: (id: string) =>
               set((state) => {
-                const actionSet = state.actions[id];
-                if (actionSet) {
-                  actionSet.actions = [];
-                }
               }),
             deleteAction: (id: string, i: number) =>
               set((state) => {
-                const actionSet = state.actions[id];
-                if (actionSet) {
-                  actionSet.actions.splice(i, 1);
-                }
               }),
             moveActionUp: (id: string, i: number) =>
               set((state) => {
-                const actionSet = state.actions[id];
-                if (actionSet) {
-                  const action = actionSet.actions[i];
-                  if (action) {
-                    actionSet.actions.splice(i, 1);
-                    actionSet.actions.splice(i - 1, 0, action);
-                  }
-                }
               }),
             moveActionDown: (id: string, i: number) => {
               set((state) => {
-                const actionSet = state.actions[id];
-                if (actionSet) {
-                  const action = actionSet.actions[i];
-                  if (action) {
-                    actionSet.actions.splice(i, 1);
-                    actionSet.actions.splice(i + 1, 0, action);
-                  }
-                }
               });
             },
             duplicateAction: (id: string, i: number) => {
               set((state) => {
-                const actionSet = state.actions[id];
-                if (actionSet) {
-                  const action = actionSet.actions[i];
-                  if (action) {
-                    actionSet.actions.splice(i + 1, 0, {
-                      ...action,
-                      id: getUniqueId(),
-                    });
-                  }
-                }
               });
             },
             setActionType: (id: string, i: number, type: number) =>
               set((state) => {
-                const actionSet = state.actions[id];
-                const action = actionSet.actions[i];
-
-                if (type === 1 || type === 6 || type === 8) {
-                  actionSet.actions[i] = {
-                    type,
-                    id: action.id,
-                    text: "",
-                    public: false,
-                  };
-                } else if (type === 5 || type === 7 || type === 9) {
-                  actionSet.actions[i] = {
-                    type,
-                    id: action.id,
-                    target_id: "",
-                    public: false,
-                  };
-                } else if (type === 2 || type === 3 || type === 4) {
-                  actionSet.actions[i] = {
-                    type,
-                    id: action.id,
-                    target_id: "",
-                    public: false,
-                    disable_default_response: false,
-                  };
-                } else if (type === 10) {
-                  actionSet.actions[i] = {
-                    type,
-                    id: action.id,
-                    permissions: "0",
-                    role_ids: [],
-                    disable_default_response: false,
-                  };
-                }
               }),
             setActionText: (id: string, i: number, text: string) =>
               set((state) => {
-                const actionSet = state.actions[id];
-                const action = actionSet.actions[i];
-                if (
-                  action.type === 1 ||
-                  action.type === 6 ||
-                  action.type === 8
-                ) {
-                  action.text = text;
-                } else if (
-                  action.type === 10 &&
-                  action.disable_default_response
-                ) {
-                  action.text = text;
-                }
               }),
             setActionTargetId: (id: string, i: number, target: string) =>
               set((state) => {
-                const actionSet = state.actions[id];
-                const action = actionSet.actions[i];
-                if (
-                  action.type === 2 ||
-                  action.type === 3 ||
-                  action.type === 4 ||
-                  action.type === 5 ||
-                  action.type === 7 ||
-                  action.type === 9
-                ) {
-                  action.target_id = target;
-                }
               }),
             setActionPublic: (id: string, i: number, val: boolean) =>
               set((state) => {
-                const actionSet = state.actions[id];
-                const action = actionSet.actions[i];
-                if (action.type !== 10) {
-                  action.public = val;
-                }
               }),
             setActionDisableDefaultResponse: (
               id: string,
@@ -1723,32 +1571,12 @@ export const createMessageStore = (key: string) =>
               val: boolean
             ) =>
               set((state) => {
-                const actionSet = state.actions[id];
-                const action = actionSet.actions[i];
-                if (
-                  action.type === 2 ||
-                  action.type === 3 ||
-                  action.type === 4 ||
-                  action.type === 10
-                ) {
-                  action.disable_default_response = val;
-                }
               }),
             setActionPermissions: (id: string, i: number, val: string) =>
               set((state) => {
-                const actionSet = state.actions[id];
-                const action = actionSet.actions[i];
-                if (action.type === 10) {
-                  action.permissions = val;
-                }
               }),
             setActionRoleIds: (id: string, i: number, val: string[]) =>
               set((state) => {
-                const actionSet = state.actions[id];
-                const action = actionSet.actions[i];
-                if (action.type === 10) {
-                  action.role_ids = val;
-                }
               }),
 
             getSelectMenu: (i: number, j: number) => {

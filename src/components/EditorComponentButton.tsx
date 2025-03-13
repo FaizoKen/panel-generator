@@ -8,7 +8,6 @@ import { useCurrentMessageStore } from "../state/message";
 import Collapsable from "./Collapsable";
 import { shallow } from "zustand/shallow";
 import EditorInput from "./EditorInput";
-import EditorActionSet from "./EditorActionSet";
 import EditorComponentEmojiSelect from "./EditorComponentEmojiSelect";
 import CheckBox from "./CheckBox";
 import { AutoAnimate } from "../util/autoAnimate";
@@ -93,7 +92,7 @@ const buttons = useCurrentMessageStore(
   );
 
   const [disabled, setDisabled] = useCurrentMessageStore((state) => [
-    state.getButton(rowIndex, compIndex)?.disabled,
+    state.getButton(rowIndex, compIndex)?.hidden,
     state.setButtonDisabled,
   ]);
 
@@ -105,10 +104,6 @@ const buttons = useCurrentMessageStore(
       state.deleteButton,
     ],
     shallow
-  );
-
-  const action = useCurrentMessageStore(
-    (state) => state.getButton(rowIndex, compIndex)?.action_set_id || ""
   );
 
   if (!style) {
@@ -124,19 +119,19 @@ const buttons = useCurrentMessageStore(
 >
   <Collapsable
     id={`components.${rowId}.buttons.${compId}`}
-    collapsable={action === "form"}
+    collapsable={compId === 10}
     valiationPathPrefix={`components.${rowIndex}.components.${compIndex}`}
     title={
-      action === "form"
+      compId === 10
         ? "Tickets"
-        : action === "rule"
+        : compId === 11
         ? "Server Rules"
-        : action === "setting"
+        : compId === 12
         ? "Panel Settings"
         : `Button ${compIndex + 1}`
     }
     extra={
-      action === "form" &&
+      compId === 10 &&
       label && (
         <div className="text-gray-500 truncate flex space-x-2 pl-2">
           <div>-</div>
@@ -157,7 +152,7 @@ const buttons = useCurrentMessageStore(
       </div>
     }
   >
-    {action === "form" && (
+    {compId === 10 && (
       <div className="space-y-4">
         <div className="flex space-x-3">
           <div className="flex-auto">
@@ -197,7 +192,7 @@ const buttons = useCurrentMessageStore(
           />
         </div>
 
-        {action === "form" ? (
+        {compId === 10 ? (
           <Collapsable
             id={`components.${rowId}.select.${compId}.modals`}
             valiationPathPrefix={`components.${rowIndex}.components.${compIndex}.modals`}

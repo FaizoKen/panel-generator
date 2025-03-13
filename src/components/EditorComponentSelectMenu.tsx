@@ -44,7 +44,6 @@ export default function EditorComponentSelectMenu({
       id: getUniqueId(),
       label: "",
       message_response: {},
-      action_set_id: getUniqueId().toString(),
     });
   }
 
@@ -71,7 +70,7 @@ export default function EditorComponentSelectMenu({
             Hidden
           </div>
           <CheckBox
-            checked={selectMenu.disabled ?? false}
+            checked={selectMenu.hidden ?? false}
             onChange={(v) => setDisabled(rowIndex, compIndex, v)}
           />
         </div>

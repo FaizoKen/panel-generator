@@ -17,7 +17,6 @@ const LazyMessagesView = lazy(() => import("./views/messages"));
 const LazyPremiumView = lazy(() => import("./views/premium"));
 const LazyShareRestoreView = lazy(() => import("./views/editor/shareRestore"));
 const LazySettingsView = lazy(() => import("./views/settings"));
-const LazyCommandsView = lazy(() => import("./views/commands"));
 const LazyScheduledMessagesView = lazy(() => import("./views/scheduled"));
 const LazyToolsView = lazy(() => import("./views/tools"));
 const LazyColoredTextToolView = lazy(() => import("./views/tools/coloredText"));
@@ -78,9 +77,7 @@ function App() {
           <Route
             path="/commands"
             element={
-              <SuspendedView>
-                <LazyCommandsView />
-              </SuspendedView>
+              <div></div>
             }
           />
           <Route

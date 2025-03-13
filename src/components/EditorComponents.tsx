@@ -30,7 +30,6 @@ export default function EditorComponents() {
           type: 2,
           style: 2,
           label: "",
-          action_set_id: "",
           modals: [],
         },
       ],

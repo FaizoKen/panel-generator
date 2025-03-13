@@ -27,7 +27,6 @@ export default function ToolsEmbedLinks() {
   const previewMsg = useMemo(() => {
     return {
       content: "https://message.style/e/123",
-      tts: false,
       username: "Some User",
       embeds: [
         {
@@ -64,7 +63,6 @@ export default function ToolsEmbedLinks() {
         },
       ],
       components: [],
-      actions: {},
     } satisfies Message;
   }, [
     title,

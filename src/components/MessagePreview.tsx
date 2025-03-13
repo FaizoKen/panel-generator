@@ -283,7 +283,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                             comp.style === 5 ? (
                               <a
                                 className={`discord-button discord-button-hoverable discord-button-secondary ${
-                                  comp.disabled ? "discord-button-disabled" : ""
+                                  comp.hidden ? "discord-button-disabled" : ""
                                 }`}
                                 key={comp.id}
                                 target="_blank"
@@ -331,7 +331,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                                 className={`discord-button discord-button-hoverable ${
                                   buttonColors[comp.style]
                                 } ${
-                                  comp.disabled ? "discord-button-disabled" : ""
+                                  comp.hidden ? "discord-button-disabled" : ""
                                 }`}
                                 key={comp.id}
                               >
@@ -359,7 +359,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                           ) : comp.type === 3 ? (
                             <div
                               className={`discord-select-menu discord-select-menu-hoverable ${
-                                comp.disabled
+                                comp.hidden
                                   ? "discord-select-menu-disabled"
                                   : ""
                               }`}

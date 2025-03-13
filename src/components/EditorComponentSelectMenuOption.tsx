@@ -8,7 +8,6 @@ import Collapsable from "./Collapsable";
 import { shallow } from "zustand/shallow";
 import { useCurrentMessageStore } from "../state/message";
 import EditorInput from "./EditorInput";
-import EditorComponentActions from "./EditorActionSet";
 import EditorComponentEmojiSelect from "./EditorComponentEmojiSelect";
 import ColorPicker from "./ColorPicker";
 import ValidationError from "./ValidationError";

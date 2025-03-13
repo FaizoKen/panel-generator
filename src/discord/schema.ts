@@ -232,8 +232,7 @@ export const buttonSchema = z
     style: z.literal(1).or(z.literal(2)).or(z.literal(3)).or(z.literal(4)),
     label: z.string(),
     emoji: z.optional(z.nullable(emojiSchema)),
-    disabled: z.optional(z.boolean()),
-    action_set_id: z.string().default(() => getUniqueId().toString()),
+    hidden: z.optional(z.boolean()),
     modals: z.array(buttonModalSchema).max(5).default([]),
   })
   .or(
@@ -244,8 +243,7 @@ export const buttonSchema = z
       label: z.string(),
       emoji: z.optional(z.nullable(emojiSchema)),
       url: z.string().refine(...urlRefinement),
-      disabled: z.optional(z.boolean()),
-      action_set_id: z.string().default(() => getUniqueId().toString()),
+      hidden: z.optional(z.boolean()),
     })
   )
   .superRefine((data, ctx) => {
@@ -274,7 +272,6 @@ export const selectMenuOptionSchema = z.object({
   description: z.optional(z.string().min(1).max(100)),
   message_response: z.optional(selectMenuOptionResponseSchema).default({}),
   emoji: z.optional(z.nullable(emojiSchema)),
-  action_set_id: z.string().default(() => getUniqueId().toString()),
 });
 
 export type MessageComponentSelectMenuOption = z.infer<
@@ -285,7 +282,7 @@ export const selectMenuSchema = z.object({
   id: uniqueIdSchema.default(() => getUniqueId()),
   type: z.literal(3),
   placeholder: z.optional(z.string().max(150)),
-  disabled: z.optional(z.boolean()),
+  hidden: z.optional(z.boolean()),
   options: z.array(selectMenuOptionSchema).min(1).max(25),
 });
 
@@ -345,11 +342,6 @@ export const messageActionSchema = z
 
 export type MessageAction = z.infer<typeof messageActionSchema>;
 
-export const messageActionSetSchema = z.object({
-  actions: z.array(messageActionSchema).max(5), //.min(1),
-});
-
-export type MessageActionSet = z.infer<typeof messageActionSetSchema>;
 
 export const messageContentSchema = z.string().max(2000);
 
@@ -379,10 +371,6 @@ export const webhookAvatarUrlSchema = z.optional(
 
 export type WebhookAvatarUrl = z.infer<typeof webhookAvatarUrlSchema>;
 
-export const messageTtsSchema = z.boolean();
-
-export type MessageTts = z.infer<typeof messageTtsSchema>;
-
 export const messageAllowedMentionsSchema = z.optional(
   z.object({
     parse: z.array(
@@ -401,12 +389,10 @@ export const messageSchema = z
     content: messageContentSchema.default(""),
     username: webhookUsernameSchema,
     avatar_url: webhookAvatarUrlSchema,
-    tts: messageTtsSchema.default(false),
     embeds: z.array(embedSchema).max(10).default([]),
     allowed_mentions: messageAllowedMentionsSchema,
     components: z.array(actionRowSchema).max(5).default([]),
     thread_name: messageThreadName,
-    actions: z.record(z.string(), messageActionSetSchema).default({}),
   })
   .superRefine((data, ctx) => {
     // this currently doesn't take attachments into account
