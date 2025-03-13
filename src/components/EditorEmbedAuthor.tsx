@@ -20,24 +20,14 @@ export default function EditorEmbedAuthor({ embedIndex, embedId }: Props) {
   const checkAuthor = Boolean(author);
 
   return (
-    <Collapsable
-      title="Community Name"
-      id={`embeds.${embedId}.author`}
-      collapsable={false}
-      valiationPathPrefix={`embeds.${embedIndex}.author`}
-          buttons={
-            <div className="flex-none text-gray-300 flex items-center space-x-2">
-              <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
-                Hidden
-              </div>
-              <CheckBox
-                checked={checkAuthor ?? false}
-                onChange={(v) => setAuthor(embedIndex, v)}
-              />
-            </div>
-          }
-    >
-<div></div>
-    </Collapsable>
+<div className="flex justify-end items-center text-gray-300 space-x-2">
+  <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
+    Community Name
+  </div>
+  <CheckBox
+    checked={checkAuthor ?? false}
+    onChange={(v) => setAuthor(embedIndex, v)}
+  />
+</div>
   );
 }

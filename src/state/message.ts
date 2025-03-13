@@ -234,63 +234,23 @@ export const defaultMessage: Message = {
     {
       "id": 1,
       "color": 5868222,
-      "author": {
-        "name": "HoYoMY Community",
-        "icon_url": "https://cdn.discordapp.com/icons/758304326988464179/a_39111c023a81e676d8bfb9db102e6d24.gif?size=4096"
-      },
       "image": {
         "url": "https://i.imgur.com/jVtMuP1.png"
       },
-      "fields": []
+      "fields": [],
+      "hidden": false
     },
     {
       "id": 2,
-      "description": " ",
       "color": 5868222,
-      "fields": []
+      "fields": [],
+      "hidden": false
     },
     {
       "id": 3,
-      "title": "Need Assistance? Here's How to Reach Support",
       "color": 5868222,
-      "fields": [
-        {
-          "id": 351957694,
-          "name": "🎫 Support Button",
-          "value": "Click the button below to start a support thread.",
-          "inline": true
-        },
-        {
-          "id": 278423939,
-          "name": "🆘 Slash Command",
-          "value": "Type `/support` to start a support thread",
-          "inline": true
-        },
-        {
-          "id": 551260849,
-          "name": "🌐 Website",
-          "value": "[Click Here](example) to contact support anonymously",
-          "inline": true
-        },
-        {
-          "id": 258090459,
-          "name": "📩 Direct Message",
-          "value": "Send me a DM to start a support thread.",
-          "inline": true
-        },
-        {
-          "id": 781083436,
-          "name": "👤 Report User",
-          "value": "Right-click a user and choose **Report User**",
-          "inline": true
-        },
-        {
-          "id": 382287250,
-          "name": "💬 Report Message",
-          "value": "Right-click a message and choose **Report Message**",
-          "inline": true
-        }
-      ]
+      "fields": [],
+      "hidden": false
     }
   ],
   "components": [
@@ -418,9 +378,7 @@ export const defaultMessage: Message = {
     "setting": {
       "actions": []
     }
-  },
-  "username": "QuickSupport",
-  "avatar_url": "https://cdn.discordapp.com/avatars/1280984633739186318/bc4438497b8c954b836b2fab77cae677.png?size=1024"
+  }
 };
 
 export const emptyMessage: Message = {

@@ -19,9 +19,9 @@ export default function EditorEmbedAuthor({ embedIndex, embedId }: Props) {
   const checkGuide = Boolean(guide);
 
   return (
-            <div className="flex-none text-gray-300 flex items-center space-x-2">
+    <div className="flex justify-end items-center text-gray-300 space-x-2">
               <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
-                Hidden
+              Support Guide
               </div>
               <CheckBox
                 checked={checkGuide ?? false}

@@ -53,7 +53,7 @@ export default function PremiumFeatures() {
       <div className="p-4 bg-dark-3 rounded flex space-x-3 items-center">
         <HeartIcon className="w-5 h-5 text-red flex-none" />
         <div className="text-gray-400 font-light text-sm">
-          By subscribing to premium you make sure that Embed Generator can
+          By subscribing to premium you make sure that Default can
           continue to exist and be updated
         </div>
       </div>

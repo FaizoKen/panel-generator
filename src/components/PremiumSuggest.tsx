@@ -74,8 +74,8 @@ export default function PremiumSuggest({ alwaysExpanded }: Props) {
             Get Premium for <span className="text-yellow">all features</span>
           </div>
           <div className="text-light text-sm text-gray-400 max-w-lg">
-            By subscribing to Embed Generator Premium you get access to all
-            features and support the development of Embed Generator.
+            By subscribing to Default Premium you get access to all
+            features and support the development of Default.
           </div>
         </div>
         {!alwaysExpanded && (

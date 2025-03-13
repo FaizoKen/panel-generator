@@ -7,6 +7,7 @@ import { shallow } from "zustand/shallow";
 import EditorEmbedImages from "./EditorEmbedImages";
 import { useMemo } from "react";
 import { colorIntToHex } from "../util/discord";
+import { FaceSmileIcon } from "@heroicons/react/20/solid";
 
 interface Props {
   embedIndex: number;
@@ -44,9 +45,11 @@ export default function EditorEmbed({ embedIndex, embedId }: Props) {
       style={{ borderColor: hexColor }}
     >
       <Collapsable
-        title={`Embed ${embedIndex + 1}`}
+        title={embedId === 1 ? "Header" : embedId === 2 ? "Body" : embedId === 3 ? "Footer" : `Embed`}
         id={`embeds.${embedId}`}
         valiationPathPrefix={`embeds.${embedIndex}`}
+        collapsable = {embedId === 3 ? false : true}
+
         size="large"
         defaultCollapsed={true}
         extra={
@@ -59,22 +62,25 @@ export default function EditorEmbed({ embedIndex, embedId }: Props) {
         }
         buttons={
           <div className="flex-none text-gray-300 flex items-center space-x-2">
+                                {embedId === 3 && (
+            <EditorEmbedGuide embedIndex={embedIndex} embedId={embedId} />
+          )}                                {embedId === 1 && (
+            <EditorEmbedAuthor embedIndex={embedIndex} embedId={embedId} />
+          )}
           </div>
         }
       >
         <div className="space-y-4">
           {embedId === 1 && (
             <>
-              <EditorEmbedAuthor embedIndex={embedIndex} embedId={embedId} />
+
               <EditorEmbedImages embedIndex={embedIndex} embedId={embedId} />
             </>
           )}
           {embedId === 2 && (
             <EditorEmbedBody embedIndex={embedIndex} embedId={embedId} />
           )}
-                    {embedId === 3 && (
-            <EditorEmbedGuide embedIndex={embedIndex} embedId={embedId} />
-          )}
+
         </div>
       </Collapsable>
     </div>

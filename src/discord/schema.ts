@@ -184,25 +184,9 @@ export const embedSchema = z
     image: embedImageSchema,
     thumbnail: embedThumbnailSchema,
     fields: z.array(embedFieldSchema).max(25).default([]),
-  })
-  .superRefine((data, ctx) => {
-    if (
-      !data.description &&
-      !data.title &&
-      !data.author &&
-      !data.provider &&
-      !data.footer &&
-      !data.fields.length &&
-      !data.image &&
-      !data.thumbnail
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["description"],
-        message: "Description is required when no other fields are set",
-      });
-    }
+    hidden: z.boolean().optional(),
   });
+
 
 export type MessageEmbed = z.infer<typeof embedSchema>;
 

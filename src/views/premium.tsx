@@ -16,12 +16,12 @@ export default function PremiumView() {
         <StarIcon className="text-yellow h-14 w-14 flex-none" />
         <div className="flex-auto">
           <div className="font-bold text-white text-xl">
-            Embed Generator <span className="text-yellow">Premium</span>
+            Default <span className="text-yellow">Premium</span>
           </div>
           <div className="text-light text-sm text-gray-400">
             {features?.is_premium
-              ? "This server is subscribed to Embed Generator Premium and has access to all features!"
-              : "Subscribe to Embed Generator Premium to unlock all features on this server!"}
+              ? "This server is subscribed to Default Premium and has access to all features!"
+              : "Subscribe to Default Premium to unlock all features on this server!"}
           </div>
         </div>
       </div>

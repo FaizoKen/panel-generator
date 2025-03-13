@@ -27,7 +27,7 @@ export default function UpsellPopup() {
     <div className="fixed bottom-5 right-5 w-80 bg-dark-2 shadow-xl rounded-lg hidden lg:block px-5 py-4 z-10">
       <div className="flex justify-between">
         <div className="text-base text-gray-100 font-bold mb-1.5">
-          Embed Generator ♥️
+          Default ♥️
         </div>
         <XMarkIcon
           className="text-gray-300 hover:text-gray-100 w-5 h-5 cursor-pointer"

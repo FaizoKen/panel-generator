@@ -216,6 +216,7 @@ export const embedSchema = z.object({
     (d) => d ?? undefined,
     z.array(embedFieldSchema).default([])
   ),
+  hidden: z.boolean().optional().default(false),
 });
 
 export type MessageEmbed = z.infer<typeof embedSchema>;

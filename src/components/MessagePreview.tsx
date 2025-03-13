@@ -9,6 +9,8 @@ import { useSendSettingsStore } from "../state/sendSettings";
 import Twemoji from "./Twemoji";
 import { useGuildBrandingQuery } from "../api/queries";
 import { getRelativeUrl } from "../util/url";
+import { usePanelVarStore } from "../state/panelvar";
+
 
 const buttonColors = {
   1: "discord-button-primary",
@@ -23,7 +25,13 @@ interface ButtonResponse {
   text: string;
 }
 
+
+
 export default function MessagePreview({ msg }: { msg: Message }) {
+  const varLoc = usePanelVarStore.getState().loc;
+
+  msg.username = varLoc.botName 
+  msg.avatar_url = varLoc.botIconUrl 
   const currentTime = format(new Date(), "hh:mm aa");
   const sendMode = useSendSettingsStore((state) => state.mode);
   const [responses, setResponses] = useState<ButtonResponse[]>([]);
@@ -32,7 +40,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
   const { data: branding } = useGuildBrandingQuery(guildId);
 
   const defaultUsername =
-    (branding?.success && branding.data.default_username) || "Embed Generator";
+    (branding?.success && branding.data.default_username) || "Default";
   const defaultAvatarUrl =
     (branding?.success && branding.data.default_avatar_url) ||
     getRelativeUrl("/logo.svg");
@@ -92,6 +100,20 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                         timestamp = format(date, "dd/MM/yyyy");
                       }
                     }
+                    if (
+                      embed.hidden ||
+                      (!embed.description &&
+                        !embed.title &&
+                        !embed.author &&
+                        !embed.provider &&
+                        !embed.footer &&
+                        (!embed.fields || embed.fields.length === 0) &&
+                        !embed.image &&
+                        !embed.thumbnail)
+                    ) {
+                      return null;
+                    }
+
                     return (
                       <div
                         key={embed.id}
@@ -232,6 +254,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                         </div>
                       </div>
                     );
+                    
                   })}
 
                 <div className="discord-attachments">
@@ -364,7 +387,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
               />
               <span className="discord-application-tag">Bot</span>
               <span className="discord-replied-message-username">
-                {msg.username || "Embed Generator"}
+                {msg.username || "Default"}
               </span>
               <div className="discord-replied-message-content truncate">
                 {msg.content || (
@@ -379,7 +402,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
               <div className="discord-message-content">
                 <span className="discord-author-info">
                   <span className="discord-author-username">
-                    Embed Generator
+                    Default
                   </span>
                   <span className="discord-application-tag">
                     <svg
