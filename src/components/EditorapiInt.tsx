@@ -104,7 +104,7 @@ export default function EditorapiInt() {
     >
     <div className="bg-dark-3 p-3 rounded-md">
       <EditorInput
-        label="API URL"
+        label="JSON API URL"
         value={apiInt}
         onChange={setapiInt}
         validationPath="apiInt"
