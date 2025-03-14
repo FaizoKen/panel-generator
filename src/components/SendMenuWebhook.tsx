@@ -80,7 +80,7 @@ export default function SendMenuWebhook() {
         </div>
       </div>
       <div className="text-orange-300 font-light">
-        Emoji are only available when inserting a Panel Key
+        Custom emoji are only available when inserting a panel key
       </div>
       <div>
         {validationError && (
