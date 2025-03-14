@@ -26,7 +26,8 @@ export default function ToolsEmbedLinks() {
 
   const previewMsg = useMemo(() => {
     return {
-      content: "https://message.style/e/123",
+      intCurl:"",
+      content: "https://example.com",
       username: "Some User",
       embeds: [
         {

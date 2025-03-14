@@ -272,7 +272,7 @@ export const defaultMessage: Message = {
                 "id": "1298193629625716776",
                 "name": "discord",
                 "animated": false
-              },
+              }
             },
             {
               "id": 879145037,
@@ -283,7 +283,7 @@ export const defaultMessage: Message = {
                 "id": "1298193629625716776",
                 "name": "discord",
                 "animated": false
-              },
+              }
             },
             {
               "id": 784367495,
@@ -294,7 +294,7 @@ export const defaultMessage: Message = {
                 "id": "1298193629625716776",
                 "name": "discord",
                 "animated": false
-              },
+              }
             }
           ]
         }
@@ -335,7 +335,7 @@ export const defaultMessage: Message = {
             "animated": false
           },
           "url": "https://discord.com",
-          "hidden": false,
+          "hidden": false
         },
         {
           "id": 12,
@@ -351,10 +351,12 @@ export const defaultMessage: Message = {
         }
       ]
     }
-  ]
+  ],
+  "intCurl": ""
 };
 
 export const emptyMessage: Message = {
+  intCurl: "",
   content: "",
   embeds: [],
   components: [],
