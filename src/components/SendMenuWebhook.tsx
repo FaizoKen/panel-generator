@@ -27,30 +27,7 @@ export default function SendMenuWebhook() {
     return parseWebhookUrl(webhookUrl);
   }, [webhookUrl]);
 
-  const [messageId, setMessageId] = useSendSettingsStore(
-    (state) => [state.messageId, state.setMessageId],
-    shallow
-  );
-  const [threadId, setThreadId] = useSendSettingsStore(
-    (state) => [state.threadId, state.setThreadId],
-    shallow
-  );
-
   const sendToWebhookMutation = useSendMessageToWebhookMutation();
-
-  function handleMessageId(val: string) {
-    if (!val) {
-      setMessageId(null);
-      return;
-    }
-
-    const match = val.match(messageUrlRegex);
-    if (match) {
-      setMessageId(match[2]);
-    } else {
-      setMessageId(val);
-    }
-  }
 
   const createToast = useToasts((state) => state.create);
 
@@ -62,15 +39,14 @@ export default function SendMenuWebhook() {
         webhook_type: webhookInfo.type,
         webhook_id: webhookInfo.id,
         webhook_token: webhookInfo.token,
-        message_id: edit ? messageId : null,
-        thread_id: threadId,
         data: useCurrentMessageStore.getState(),
         attachments: useCurrentAttachmentsStore.getState().attachments,
+        thread_id: null, // Add thread_id with null value
+        message_id: null, // Add message_id with null value
       },
       {
         onSuccess: (resp) => {
           if (resp.success) {
-            setMessageId(resp.data.message_id);
             createToast({
               type: "success",
               title: "Message has been sent",
@@ -93,7 +69,7 @@ export default function SendMenuWebhook() {
       <div className="flex">
         <div className="flex-auto">
           <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
-            Webhook URL
+            Panel Key
           </div>
           <input
             type="url"
@@ -103,33 +79,8 @@ export default function SendMenuWebhook() {
           />
         </div>
       </div>
-      <div className="flex space-x-3">
-        <div className="flex-auto">
-          <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
-            Thread ID
-          </div>
-          <input
-            type="text"
-            className="bg-dark-2 px-3 py-2 rounded w-full focus:outline-none text-white"
-            onChange={(e) => setThreadId(e.target.value || null)}
-            value={threadId ?? ""}
-          />
-        </div>
-        <div className="flex-auto">
-          <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
-            Message ID or URL
-          </div>
-          <input
-            type="text"
-            className="bg-dark-2 px-3 py-2 rounded w-full focus:outline-none text-white"
-            onChange={(e) => handleMessageId(e.target.value)}
-            value={messageId ?? ""}
-          />
-        </div>
-      </div>
       <div className="text-orange-300 font-light">
-        Interactive components are only available when selecting a server and
-        channel instead of sending to a webhook.
+        Emoji are only available when inserting a Panel Key
       </div>
       <div>
         {validationError && (
@@ -145,22 +96,6 @@ export default function SendMenuWebhook() {
       <div className="flex justify-end flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 items-end md:items-center">
         <MessageRestoreButton />
         <div className="flex items-center space-x-2">
-          {messageId && (
-            <div
-              className={`px-3 py-2 rounded text-white flex items-center space-x-3 ${
-                validationError || !webhookInfo || webhookInfo.type != "discord"
-                  ? "cursor-not-allowed bg-dark-2"
-                  : "bg-blurple hover:bg-blurple-dark cursor-pointer"
-              }`}
-              role="button"
-              onClick={() => send(true)}
-            >
-              {sendToWebhookMutation.isLoading && (
-                <div className="h-2 w-2 bg-white rounded-full animate-ping"></div>
-              )}
-              <div>Edit Message</div>
-            </div>
-          )}
           <div
             className={`px-3 py-2 rounded text-white flex items-center space-x-3 ${
               validationError || !webhookInfo

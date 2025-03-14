@@ -16,7 +16,9 @@ export default function EditorMessagePreview() {
   if (msg) {
     return (
       <Suspense>
-        <LazyMessagePreview msg={msg} />
+        <div style={{ transform: "scale(0.8)" }}>
+          <LazyMessagePreview msg={msg} />
+        </div>
       </Suspense>
     );
   } else {

@@ -60,7 +60,7 @@ export default function EditorView() {
           </Drawer.Trigger>
           <Drawer.Portal>
             <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-            <Drawer.Content className="bg-dark-4 flex flex-col fixed bottom-0 left-0 right-0 max-h-[80%] rounded-t-[10px] overflow-y-hidden h-full focus:outline-none">
+            <Drawer.Content className="z-10 bg-dark-4 flex flex-col fixed bottom-0 left-0 right-0 max-h-[80%] rounded-t-[10px] overflow-y-hidden h-full focus:outline-none">
               <div className="overflow-y-hidden h-full px-3 flex flex-col">
                 <div className="p-4 flex-none">
                   <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-600" />
