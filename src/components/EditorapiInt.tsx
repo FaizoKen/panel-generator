@@ -49,6 +49,7 @@ export default function EditorapiInt() {
 
     if (!validateUrl(apiInt)) {
       setError("Please enter a valid URL");
+      setInt({}); // Send empty object on error
       return;
     }
 
@@ -69,6 +70,7 @@ export default function EditorapiInt() {
         if (error instanceof Error && error.name !== 'AbortError') {
           console.error("API Error:", error);
           setError(error.message || "Failed to fetch data");
+          setInt({}); // Send empty object on error
         }
       } finally {
         setIsLoading(false);
@@ -90,7 +92,7 @@ export default function EditorapiInt() {
     if (isLoading) return <div style={{ color: 'gray', fontSize: '0.875rem', marginTop: '0.5rem' }}>Loading...</div>;
     if (isWaiting) return <div style={{ color: 'gray', fontSize: '0.875rem', marginTop: '0.5rem' }}>Waiting for input...</div>;
     if (int && Object.keys(int).length > 0) return (
-      <div style={{ color: 'green', fontSize: '0.875rem', marginTop: '0.5rem' }}>Successfully loaded API data</div>
+      <div style={{ color: 'green', fontSize: '0.875rem', marginTop: '0.5rem' }}>Successfully loaded data</div>
     );
     return null;
   };

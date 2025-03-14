@@ -94,8 +94,8 @@ export default function SendMenuWebhook() {
         )}
       </div>
       <div className="flex justify-end flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 items-end md:items-center">
-        <MessageRestoreButton />
         <div className="flex items-center space-x-2">
+          <MessageRestoreButton />
           <div
             className={`px-3 py-2 rounded text-white flex items-center space-x-3 ${
               validationError || !webhookInfo
