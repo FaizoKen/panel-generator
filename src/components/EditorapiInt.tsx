@@ -1,53 +1,105 @@
 import { useState, useEffect } from "react";
 import { useCurrentMessageStore } from "../state/message";
-import { usePanelVarStore } from "../state/panelvar"; // Import usePanelVarStore
+import { usePanelVarStore } from "../state/panelvar";
 import EditorInput from "./EditorInput";
+import JsonPathFinder from "./jsonpathfinder";
 
 export default function EditorapiInt() {
-  const apiInt = useCurrentMessageStore((state) => state.apiInt);
-  const setapiInt = useCurrentMessageStore((state) => state.setapiInt);
+  const { apiInt, setapiInt } = useCurrentMessageStore();
+  const { int, setInt } = usePanelVarStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [abortController, setAbortController] = useState<AbortController | null>(null);
 
-  const int = usePanelVarStore((state) => state.int); // Get int state
-  const setInt = usePanelVarStore((state) => state.setInt); // Get setInt function
-
-  const [timeoutId, setTimeoutId] = useState<number | null>(null);
+  const validateUrl = (url: string): boolean => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
 
   useEffect(() => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
+    // Clear pending requests and timeouts on unmount
+    return () => {
+      timeoutId && clearTimeout(timeoutId);
+      abortController?.abort();
+    };
+  }, [timeoutId, abortController]);
+
+  useEffect(() => {
+    // Cancel any pending requests
+    abortController?.abort();
+    setError(null);
 
     if (!apiInt.trim()) {
-      setTimeout(() => {
-        setInt({});
-      }, 3000);
+      const id = setTimeout(() => setInt({}), 3000);
+      setTimeoutId(id);
       return;
     }
 
+    if (!validateUrl(apiInt)) {
+      setError("Please enter a valid URL");
+      return;
+    }
+
+    const controller = new AbortController();
+    setAbortController(controller);
+
     const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const response = await fetch(apiInt);
+        const response = await fetch(apiInt, { signal: controller.signal });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
         const data = await response.json();
-        setInt(data); // Store API response in Zustand store
+        setInt(data);
+        setError(null);
       } catch (error) {
-        console.error("API Error:", error);
+        if (error instanceof Error && error.name !== 'AbortError') {
+          console.error("API Error:", error);
+          setError(error.message || "Failed to fetch data");
+        }
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    const id = window.setTimeout(fetchData, 3000);
+    const id = setTimeout(fetchData, 3000);
     setTimeoutId(id);
 
-    return () => clearTimeout(id);
+    return () => {
+      clearTimeout(id);
+      controller.abort();
+    };
   }, [apiInt, setInt]);
 
   return (
-    <div>
+    <div className="space-y-2">
       <EditorInput
         label="API Integration | cURL GET"
         value={apiInt}
-        onChange={(v) => setapiInt(v)}
-        validationPath={`apiInt`}
+        onChange={setapiInt}
+        validationPath="apiInt"
       />
+      
+      
+      {isLoading && (
+        <div style={{ color: 'gray', fontSize: '0.875rem' }}>Loading...</div>
+      )}
+      
+      {error && (
+        <div style={{ color: 'red', fontSize: '0.875rem' }}>{error}</div>
+      )}
+      
+      {!isLoading && !error && int && Object.keys(int).length > 0 && (
+        <div style={{ color: 'green', fontSize: '0.875rem' }}>
+          Successfully loaded API data
+        </div>
+      )}
+      {int && Object.keys(int).length > 0 && <JsonPathFinder />}
     </div>
   );
 }
