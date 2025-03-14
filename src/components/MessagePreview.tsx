@@ -27,7 +27,21 @@ interface ButtonResponse {
 
 function replaceVar(content: string, intData: any): string {
   return content.replace(/\{\{(.*?)\}\}/g, (match: string, key: string) => {
-    const keys = key.trim().split(".");
+    const trimmedKey = key.trim();
+    const parts = trimmedKey.split('.');
+    const keys: string[] = [];
+
+    for (const part of parts) {
+      const base = part.split('[')[0];
+      keys.push(base);
+      const remaining = part.slice(base.length);
+      const indexRegex = /\[([^\]]*)\]/g;
+      let indexMatch;
+      while ((indexMatch = indexRegex.exec(remaining)) !== null) {
+        keys.push(indexMatch[1]);
+      }
+    }
+
     let value: any = intData;
 
     for (const k of keys) {

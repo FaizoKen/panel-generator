@@ -1,42 +1,49 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useCurrentMessageStore } from "../state/message";
 import { usePanelVarStore } from "../state/panelvar";
 import EditorInput from "./EditorInput";
 import JsonPathFinder from "./jsonpathfinder";
+import Collapsable from "./Collapsable";
+
+const validateUrl = (url: string): boolean => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
 
 export default function EditorapiInt() {
   const { apiInt, setapiInt } = useCurrentMessageStore();
   const { int, setInt } = usePanelVarStore();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout> | null>(null);
-  const [abortController, setAbortController] = useState<AbortController | null>(null);
-
-  const validateUrl = (url: string): boolean => {
-    try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
-    }
-  };
+  const [isWaiting, setIsWaiting] = useState(false);
+  
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    // Clear pending requests and timeouts on unmount
     return () => {
-      timeoutId && clearTimeout(timeoutId);
-      abortController?.abort();
+      timeoutRef.current && clearTimeout(timeoutRef.current);
+      abortControllerRef.current?.abort();
     };
-  }, [timeoutId, abortController]);
+  }, []);
 
   useEffect(() => {
-    // Cancel any pending requests
-    abortController?.abort();
     setError(null);
+    setIsWaiting(false);
+    setIsLoading(false);
+    timeoutRef.current && clearTimeout(timeoutRef.current);
+    abortControllerRef.current?.abort();
 
     if (!apiInt.trim()) {
-      const id = setTimeout(() => setInt({}), 3000);
-      setTimeoutId(id);
+      timeoutRef.current = setTimeout(() => {
+        setInt({});
+        setIsWaiting(false);
+      }, 3000);
+      setIsWaiting(true);
       return;
     }
 
@@ -46,13 +53,14 @@ export default function EditorapiInt() {
     }
 
     const controller = new AbortController();
-    setAbortController(controller);
+    abortControllerRef.current = controller;
 
     const fetchData = async () => {
+      setIsWaiting(false);
       setIsLoading(true);
       try {
         const response = await fetch(apiInt, { signal: controller.signal });
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status} - ${response.statusText}`);
         
         const data = await response.json();
         setInt(data);
@@ -67,39 +75,46 @@ export default function EditorapiInt() {
       }
     };
 
-    const id = setTimeout(fetchData, 3000);
-    setTimeoutId(id);
+    timeoutRef.current = setTimeout(fetchData, 2000);
+    setIsWaiting(true);
 
     return () => {
-      clearTimeout(id);
+      timeoutRef.current && clearTimeout(timeoutRef.current);
       controller.abort();
+      setIsWaiting(false);
     };
   }, [apiInt, setInt]);
 
+  const getStatusMessage = () => {
+    if (error) return <div style={{ color: 'red', fontSize: '0.875rem', marginTop: '0.5rem' }}>{error}</div>;
+    if (isLoading) return <div style={{ color: 'gray', fontSize: '0.875rem', marginTop: '0.5rem' }}>Loading...</div>;
+    if (isWaiting) return <div style={{ color: 'gray', fontSize: '0.875rem', marginTop: '0.5rem' }}>Waiting for input...</div>;
+    if (int && Object.keys(int).length > 0) return (
+      <div style={{ color: 'green', fontSize: '0.875rem', marginTop: '0.5rem' }}>Successfully loaded API data</div>
+    );
+    return null;
+  };
+
   return (
-    <div className="space-y-2">
+    <Collapsable
+      id="apiInt"
+      title="API Integrations"
+      size="large"
+      valiationPathPrefix="apiInt"
+    >
+    <div className="bg-dark-3 p-3 rounded-md">
       <EditorInput
-        label="API Integration | cURL GET"
+        label="API URL"
         value={apiInt}
         onChange={setapiInt}
         validationPath="apiInt"
       />
       
-      
-      {isLoading && (
-        <div style={{ color: 'gray', fontSize: '0.875rem' }}>Loading...</div>
-      )}
-      
-      {error && (
-        <div style={{ color: 'red', fontSize: '0.875rem' }}>{error}</div>
-      )}
-      
-      {!isLoading && !error && int && Object.keys(int).length > 0 && (
-        <div style={{ color: 'green', fontSize: '0.875rem' }}>
-          Successfully loaded API data
-        </div>
-      )}
+      {getStatusMessage()}
+
       {int && Object.keys(int).length > 0 && <JsonPathFinder />}
+
     </div>
+    </Collapsable>
   );
 }
