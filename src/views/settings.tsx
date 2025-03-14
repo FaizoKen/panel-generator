@@ -6,7 +6,6 @@ export default function SettingsView() {
     <div className="overflow-y-auto w-full">
       <div className="max-w-5xl w-full mx-auto px-4 my-5 lg:my-20 space-y-10">
         <SettingsGeneral />
-        <SettingsCustomBot />
       </div>
     </div>
   );

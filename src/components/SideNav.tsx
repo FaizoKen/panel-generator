@@ -22,9 +22,9 @@ import { useGuildsQuery, useUserQuery } from "../api/queries";
 import { guildIconUrl } from "../discord/cdn";
 import { useSendSettingsStore } from "../state/sendSettings";
 import { shallow } from "zustand/shallow";
-import LoginLink from "./LoginLink";
 import LogoutLink from "./LogoutLink";
 import { useSettingsStore } from "../state/settings";
+import Logo from "../assets/logo.svg"; // Import the logo
 
 const collapsedBreakpoint = 1680;
 
@@ -55,50 +55,32 @@ export default function SideNav() {
       <div
         className={clsx(
           "h-full bg-dark-3 flex-none transition-all fixed z-30 shadow",
-          collapsed ? "w-16" : "w-64",
-          hidden && "hidden xl:relative xl:block"
+          collapsed ? "w-18" : "w-64", // Decreased widths
+          hidden && "hidden xl:relative xl:block",
         )}
       >
         <div className="flex flex-col justify-between h-full">
           <div
             className={clsx("flex flex-col py-5", collapsed && "items-center")}
           >
-            {/* <div className="justify-end px-3 hidden xl:flex">
-              <div
-                className="mb-5 cursor-pointer text-gray-300 hover:text-white"
-                role="button"
-                onClick={() => setCollapsed((h) => !h)}
-              >
-                {collapsed ? (
-                  <ChevronDoubleRightIcon className="h-6 w-6" />
-                ) : (
-                  <ChevronDoubleLeftIcon className="h-6 w-6" />
-                )}
-              </div>
-            </div> */}
             <div className="mb-7">
               {user && user.success ? (
                 <NavigationGuildSelect collapsed={collapsed} />
               ) : (
-                <LoginLink
-                  className={clsx(
-                    "bg-dark-2 flex items-center mx-3 group",
-                    collapsed ? "rounded-full p-2" : "rounded p-2"
-                  )}
-                >
-                  <ArrowRightOnRectangleIcon className="h-8 w-8 flex-none text-gray-300 group-hover:text-white" />
+                <div className="flex items-center ml-4 mx-3">
+                  <img
+                    src={Logo}
+                    alt="Logo"
+                    className={clsx(
+                      collapsed ? "h-12 w-12" : "h-10 w-10"
+                    )}
+                  />
                   {!collapsed && (
-                    <div className="ml-5">
-                      <div className="text-gray-300 group-hover:text-white mb-1">
-                        Login
-                      </div>
-                      <div className="text-xs text-gray-400">
-                        Many features are only available after loggin in with
-                        your Discord account!
-                      </div>
-                    </div>
+                    <span className="ml-3 text-gray-300 text-lg font-semibold">
+                      Panel Generator
+                    </span>
                   )}
-                </LoginLink>
+                </div>
               )}
             </div>
             <div
@@ -119,34 +101,6 @@ export default function SideNav() {
                 href="/messages"
                 label="Saved Messages"
                 icon={RectangleStackIcon}
-                collapsed={collapsed}
-                setHidden={setHidden}
-              />
-              <NavigationButton
-                href="/scheduled"
-                label="Scheduled Messages"
-                icon={CalendarDaysIcon}
-                collapsed={collapsed}
-                setHidden={setHidden}
-              />
-              <NavigationButton
-                href="/commands"
-                label="Commands"
-                icon={CommandLineIcon}
-                collapsed={collapsed}
-                setHidden={setHidden}
-              />
-              <NavigationButton
-                href="/tools"
-                label="Utility Tools"
-                icon={WrenchScrewdriverIcon}
-                collapsed={collapsed}
-                setHidden={setHidden}
-              />
-              <NavigationButton
-                href="/premium"
-                label="Premium"
-                icon={StarIcon}
                 collapsed={collapsed}
                 setHidden={setHidden}
               />
