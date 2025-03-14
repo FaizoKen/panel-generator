@@ -29,6 +29,7 @@ export interface MessageStore extends Message {
   clear(): void;
   replace(message: Message): void;
   setContent: (content: string) => void;
+  setapiInt: (apiInt: string) => void;
   setUsername: (username: string | undefined) => void;
   setAvatarUrl: (avatar_url: string | undefined) => void;
   setThreadName: (thread_name: string | undefined) => void;
@@ -352,11 +353,11 @@ export const defaultMessage: Message = {
       ]
     }
   ],
-  "intCurl": ""
+  "apiInt": ""
 };
 
 export const emptyMessage: Message = {
-  intCurl: "",
+  apiInt: "",
   content: "",
   embeds: [],
   components: [],
@@ -373,6 +374,7 @@ export const createMessageStore = (key: string) =>
             clear: () => set(defaultMessage),
             replace: (message: Message) => set(message),
             setContent: (content: string) => set({ content }),
+            setapiInt: (apiInt: string) => set({ apiInt }),
             setUsername: (username: string | undefined) => set({ username }),
             setAvatarUrl: (avatar_url: string | undefined) =>
               set({ avatar_url }),

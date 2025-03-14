@@ -345,7 +345,7 @@ export type MessageAction = z.infer<typeof messageActionSchema>;
 
 export const messageContentSchema = z.string().max(2000);
 
-export const intCurlSchema = z.string();
+export const apiIntSchema = z.string();
 
 export type MessageContent = z.infer<typeof messageContentSchema>;
 
@@ -388,7 +388,7 @@ export const messageThreadName = z.optional(z.string().max(100));
 
 export const messageSchema = z
   .object({
-    intCurl: intCurlSchema.default(""),
+    apiInt: apiIntSchema.default(""),
     content: messageContentSchema.default(""),
     username: webhookUsernameSchema,
     avatar_url: webhookAvatarUrlSchema,

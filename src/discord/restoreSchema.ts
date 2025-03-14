@@ -375,7 +375,7 @@ export type MessageActionSet = z.infer<typeof messageActionSetSchema>;
 export const messageContentSchema = z.preprocess(
   (d) => d ?? undefined, z.string().default("") );
 
-  export const intCurlSchema = z.preprocess(
+  export const apiIntSchema = z.preprocess(
     (d) => d ?? undefined, z.string().default("") );
 
 export type MessageContent = z.infer<typeof messageContentSchema>;
@@ -412,7 +412,7 @@ export const messageAllowedMentionsSchema = z.preprocess(
 export const messageThreadName = z.optional(z.string());
 
 export const messageSchema = z.object({
-  intCurl: z.preprocess( (d) => d ?? undefined, intCurlSchema.default("") ),
+  apiInt: z.preprocess( (d) => d ?? undefined, apiIntSchema.default("") ),
   content: z.preprocess( (d) => d ?? undefined, messageContentSchema.default("") ),
   username: webhookUsernameSchema,
   avatar_url: webhookAvatarUrlSchema,

@@ -1,6 +1,6 @@
 import "./MessagePreview.css";
 import { format, parseISO } from "date-fns";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Message } from "../discord/schema";
 // @ts-ignore
 import { toHTML } from "../discord/markdown";
@@ -24,12 +24,11 @@ interface ButtonResponse {
   id: number;
   text: string;
 }
-const int = usePanelVarStore.getState().int;
 
-function replaceVar(content: string): string {
+function replaceVar(content: string, intData: any): string {
   return content.replace(/\{\{(.*?)\}\}/g, (match: string, key: string) => {
     const keys = key.trim().split(".");
-    let value: any = int;
+    let value: any = intData;
 
     for (const k of keys) {
       if (value && typeof value === "object" && k in value) {
@@ -61,6 +60,16 @@ export default function MessagePreview({ msg }: { msg: Message }) {
   const defaultAvatarUrl =
     (branding?.success && branding.data.default_avatar_url) ||
     loc.botIconUrl ;
+
+  const [intData, setIntData] = useState(usePanelVarStore.getState().int);
+
+  useEffect(() => {
+    const unsubscribe = usePanelVarStore.subscribe((state) => {
+      const newIntData: typeof intData = state.int;
+      setIntData(newIntData);
+    });
+    return () => unsubscribe();
+  }, []);
 
   return (
     <Twemoji
@@ -96,7 +105,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
     <div
       className="discord-message-markup"
       dangerouslySetInnerHTML={{
-        __html: toHTML(replaceVar(msg.content) || "", {}),
+        __html: toHTML(replaceVar(msg.content, intData) || "", {}),
       }}
     />
   </div>
@@ -176,9 +185,9 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                                 <div className="discord-embed-title overflow-hidden break-all">
                                   {embed.url ? (
                                     <a
-                                    href={replaceVar(embed.url) || "#"} // Fallback to "#" if URL is empty
+                                    href={replaceVar(embed.url, intData) || "#"} // Fallback to "#" if URL is empty
                                       dangerouslySetInnerHTML={{
-                                        __html: toHTML(replaceVar(embed.title) || "", {
+                                        __html: toHTML(replaceVar(embed.title, intData) || "", {
                                           isTitle: true,
                                         }),
                                       }}
@@ -186,7 +195,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                                   ) : (
                                     <span
                                       dangerouslySetInnerHTML={{
-                                        __html: toHTML(replaceVar(embed.title) || "", {
+                                        __html: toHTML(replaceVar(embed.title, intData) || "", {
                                           isTitle: true,
                                         }),
                                       }}
@@ -198,7 +207,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                                 <div
                                   className="discord-embed-description"
                                   dangerouslySetInnerHTML={{
-                                    __html: toHTML(replaceVar(embed.description) || "", {}),
+                                    __html: toHTML(replaceVar(embed.description, intData) || "", {}),
                                   }}
                                 />
                               )}
@@ -218,14 +227,14 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                                       <div
                                         className="discord-field-title overflow-hidden break-all"
                                         dangerouslySetInnerHTML={{
-                                          __html: toHTML(replaceVar(field.name) || "", {
+                                          __html: toHTML(replaceVar(field.name, intData) || "", {
                                             isTitle: true,
                                           }),
                                         }}
                                       />
                                       <div
                                         dangerouslySetInnerHTML={{
-                                          __html: toHTML(replaceVar(field.value), {}),
+                                          __html: toHTML(replaceVar(field.value, intData), {}),
                                         }}
                                       />
                                     </div>
@@ -235,7 +244,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                               {!!embed.image && (
                                 <div className="discord-embed-media">
                                   <img
-                                    src={replaceVar(embed.image.url ?? '')}
+                                    src={replaceVar(embed.image.url ?? '', intData)}
                                     alt=""
                                     className="discord-embed-image"
                                   />
@@ -243,7 +252,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                               )}
                               {!!embed.thumbnail && (
                                 <img
-                                src={embed.image?.url ? replaceVar(embed.image.url) : ''}
+                                src={embed.image?.url ? replaceVar(embed.image.url, intData) : ''}
                                   alt=""
                                   className="discord-embed-thumbnail"
                                 />
@@ -353,7 +362,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                                       {comp.emoji.name}
                                     </Twemoji>
                                   ))}
-                                <span>{replaceVar(comp.label)}</span>
+                                <span>{replaceVar(comp.label, intData)}</span>
                               </div>
                             )
                           ) : comp.type === 3 ? (
@@ -366,7 +375,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                               key={comp.id}
                             >
 <span className="discord-select-menu-placeholder">
-  {replaceVar(comp.placeholder ?? "Make a selection")}
+  {replaceVar(comp.placeholder ?? "Make a selection", intData)}
 </span>
 
                               <svg

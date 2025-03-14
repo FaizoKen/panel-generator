@@ -35,8 +35,6 @@ export const usePanelVarStore = create<PanelVarStore>((set) => ({
       "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/62fddf0fde45a8baedcc7ee5_847541504914fd33810e70a0ea73177e%20(2)-1.png",
   },
   int: {
-    test: "ok",
-    testBanner: "https://i.imgur.com/jVtMuP1.png"
   },
   setLoc: (loc) => set((state) => ({ loc: { ...state.loc, ...loc } })),
   setInt: (int) => set({ int }),
