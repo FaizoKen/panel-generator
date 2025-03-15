@@ -60,7 +60,7 @@ export default function EditorapiInt() {
       setIsWaiting(false);
       setIsLoading(true);
       try {
-        const response = await fetch(apiInt, { signal: controller.signal });
+        const response = await fetch(`https://curl.faizo.top/?url=${encodeURIComponent(apiInt)}`, { signal: controller.signal });
         if (!response.ok) throw new Error(`HTTP ${response.status} - ${response.statusText}`);
         
         const data = await response.json();
