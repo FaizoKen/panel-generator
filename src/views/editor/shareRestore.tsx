@@ -6,6 +6,7 @@ import { useSharedMessageQuery } from "../../api/queries";
 import { useMemo } from "react";
 import { useToasts } from "../../util/toasts";
 import { parseMessageWithAction } from "../../discord/restoreSchema";
+import { transformJson } from "../../util/transformJson";
 
 const decodeMessage = (sharedMessageId: string | undefined) => {
   if (!sharedMessageId) return null; // Handle undefined case
@@ -22,7 +23,7 @@ const decodeMessage = (sharedMessageId: string | undefined) => {
 export default function ShareRestoreView() {
   const { sharedMessageId } = useParams<{ sharedMessageId: string }>(); // Ensure TypeScript knows the expected param
 
-  const decodedMessage = decodeMessage(sharedMessageId);
+  const decodedMessageRaw = decodeMessage(sharedMessageId);
 
   const navigate = useNavigate();
 
@@ -33,11 +34,13 @@ export default function ShareRestoreView() {
   const createToast = useToasts((state) => state.create);
 
   const parsedData = useMemo(() => {
-    if (!decodedMessage) return null;
+    if (!decodedMessageRaw) return null;
 
-    if (decodedMessage) {
+    if (decodedMessageRaw) {
       try {
+        const decodedMessage = transformJson(decodedMessageRaw);
         const parsedData = parseMessageWithAction(decodedMessage);
+      
         return parsedData;
       } catch (e) {
         createToast({

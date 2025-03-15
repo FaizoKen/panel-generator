@@ -1,8 +1,10 @@
 import { useEffect, useState, useMemo } from "react";
 import { useCurrentMessageStore } from "../../state/message";
+import { reverseTransformJson } from "../../util/reverseTransformJson";
 
 const useEncodedMessageURL = () => {
-  const msg = useCurrentMessageStore();
+  const rawMsg = useCurrentMessageStore();
+  const msg = reverseTransformJson(rawMsg);
   const [shortURL, setShortURL] = useState("");
 
   const encodedURL = useMemo(() => {

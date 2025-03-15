@@ -32,7 +32,7 @@ function App() {
     <div className="h-[100dvh] w-[100dvw] overflow-y-auto">
       <RequestLoadingIndicator />
       <ActivityLoadingScreen />
-      <UpsellPopup />
+      {/* <UpsellPopup /> */}
       <ConfirmOnExit />
       <div className="flex h-full">
         <EditorSideNav />

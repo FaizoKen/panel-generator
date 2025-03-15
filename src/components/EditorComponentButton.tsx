@@ -172,7 +172,6 @@ const buttons = useCurrentMessageStore(
               <option value="2">Grey</option>
               <option value="3">Green</option>
               <option value="4">Red</option>
-              <option value="5">Direct Link</option>
             </select>
           </div>
         </div>

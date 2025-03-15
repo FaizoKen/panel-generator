@@ -9,6 +9,7 @@ import { parseMessageWithAction } from "../../discord/restoreSchema";
 import { useNavigate } from "react-router-dom";
 import { useToasts } from "../../util/toasts";
 import { transformJson } from "../../util/transformJson";
+import { reverseTransformJson } from "../../util/reverseTransformJson";
 
 export default function JsonView() {
   const navigate = useNavigate();
@@ -18,16 +19,16 @@ export default function JsonView() {
 
   const [raw, setRaw] = useState("{}");
 
+  const reversed = reverseTransformJson(msg);
+
   useEffect(() => {
-    setRaw(JSON.stringify(msg, null, 2));
+    setRaw(JSON.stringify(reversed, null, 2));
   }, [msg]);
 
   function save() {
     try {
       const dataRaw = JSON.parse(raw);
       const data = transformJson(dataRaw);
-      console.log(JSON.stringify(data));
-
       const parsedData = parseMessageWithAction(data);
 
       msg.replace(parsedData);
