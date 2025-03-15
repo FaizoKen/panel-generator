@@ -505,12 +505,11 @@ export const createMessageStore = (key: string) =>
                     if (use) {
                       const guideData = generateGuide(); // Get the generated guide
                 
-                      if (guideData.length > 0) {
-                        const firstGuide = guideData[0]; // Use the first guide entry for title & color
+                      if (guideData) {
                 
-                        embed.title = firstGuide.title;
-                        embed.color = firstGuide.color;
-                        embed.fields = guideData.flatMap((item) => item.fields || []);
+                        embed.title = guideData.title;
+                        embed.color = guideData.color;
+                        embed.fields = guideData.fields.flatMap((item) => item || []);
                       }
                     } else {
                       // Remove properties from the embed

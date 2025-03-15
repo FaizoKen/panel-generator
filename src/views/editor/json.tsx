@@ -8,6 +8,7 @@ import { linter, lintGutter } from "@codemirror/lint";
 import { parseMessageWithAction } from "../../discord/restoreSchema";
 import { useNavigate } from "react-router-dom";
 import { useToasts } from "../../util/toasts";
+import { transformJson } from "../../util/transformJson";
 
 export default function JsonView() {
   const navigate = useNavigate();
@@ -23,7 +24,10 @@ export default function JsonView() {
 
   function save() {
     try {
-      const data = JSON.parse(raw);
+      const dataRaw = JSON.parse(raw);
+      const data = transformJson(dataRaw);
+      console.log(JSON.stringify(data));
+
       const parsedData = parseMessageWithAction(data);
 
       msg.replace(parsedData);

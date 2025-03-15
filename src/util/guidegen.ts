@@ -24,17 +24,15 @@ export function generateGuide() {
     }
 
     // Default structure with proper typing
-    let guide: Guide[] = [
-        {
-            id: 3,
-            title: "Need Assistance? Here's How to Reach Support",
-            color: embedColor,
-            fields: [],
-        }
-    ];
+    let guide: Guide = {
+        id: 3,
+        title: "Need Assistance? Here's How to Reach Support",
+        color: embedColor,
+        fields: [],
+    };
 
     if (loc.guideType === 1 || loc.guideType === 2) {
-        guide[0].fields.push(
+        guide.fields.push(
             {
                 id: 351957694,
                 name: "🎫 Support Button",
@@ -57,7 +55,7 @@ export function generateGuide() {
     }
 
     if (loc.guideType === 1) {
-        guide[0].fields.push(
+        guide.fields.push(
             {
                 id: 258090459,
                 name: "📩 Direct Message",
