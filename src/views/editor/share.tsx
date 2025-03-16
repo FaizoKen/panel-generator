@@ -1,15 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useToasts } from "../../util/toasts";
-import useEncodedMessageURL from "./EncodedMessageURL";
+import { useEncodedMessageURL, useShortLink } from "./EncodedMessageURL";
 
 export default function ShareView() {
   const navigate = useNavigate();
-
   const createToast = useToasts((state) => state.create);
 
-  const encodedMessageURL = useEncodedMessageURL();
+  const encodedURL = useEncodedMessageURL();
+  const shortURL = useShortLink();
+  const [useShort, setUseShort] = useState(false);
+
+  const urlTransform = useShort ? shortURL : encodedURL;
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -27,14 +30,22 @@ export default function ShareView() {
   }
 
   return (
-    <Modal width="xs" onClose={() => navigate("/editor")}>
+    <Modal width="xs" onClose={() => navigate("/editor")}> 
       <div className="p-4">
         <div className="text-lg mb-5 text-white">
           Copy the URL below to share your message
         </div>
+        <div className="flex items-center mb-3">
+          <label className="text-white mr-2">Use a Short Link (expires in 7 days)</label>
+          <input
+            type="checkbox"
+            checked={useShort}
+            onChange={() => setUseShort(!useShort)}
+          />
+        </div>
         <input
           type="text"
-          value={encodedMessageURL}
+          value={urlTransform}
           className="px-3 py-2 bg-dark-2 rounded w-full focus:outline-none text-white mb-5"
           readOnly
           ref={inputRef}
