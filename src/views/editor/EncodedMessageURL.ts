@@ -21,7 +21,7 @@ const useEncodedMessageURL = () => {
 
   useEffect(() => {
     if (encodedURL) {
-      fetch(`https://tinyurl.com/api-create.php?url=${encodedURL}`)
+      fetch(`https://url.faizo.net?url=${encodedURL}`)
         .then((res) => res.text())
         .then((shortened) => setShortURL(shortened))
         .catch((error) => console.error("Shortening failed:", error));
