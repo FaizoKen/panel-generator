@@ -31,6 +31,33 @@ export default function EditorapiInt() {
     };
   }, []);
 
+  const fetchData = async (url: string, useProxy: boolean = false) => {
+    setIsWaiting(false);
+    setIsLoading(true);
+    try {
+      const fetchUrl = useProxy ? `https://curl.faizo.top/?url=${encodeURIComponent(url)}` : url;
+      const response = await fetch(fetchUrl, { signal: abortControllerRef.current?.signal });
+      if (!response.ok) throw new Error(`HTTP ${response.status} - ${response.statusText}`);
+      
+      const data = await response.json();
+      setInt(data);
+      setError(null);
+    } catch (error) {
+      if (error instanceof Error && error.name !== 'AbortError') {
+        console.error("API Error:", error);
+        if (!useProxy) {
+          // Retry with proxy
+          fetchData(url, true);
+        } else {
+          setError(error.message || "Failed to fetch data");
+          setInt({}); // Send empty object on error
+        }
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     setError(null);
     setIsWaiting(false);
@@ -56,28 +83,7 @@ export default function EditorapiInt() {
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
-    const fetchData = async () => {
-      setIsWaiting(false);
-      setIsLoading(true);
-      try {
-        const response = await fetch(`https://curl.faizo.top/?url=${encodeURIComponent(apiInt)}`, { signal: controller.signal });
-        if (!response.ok) throw new Error(`HTTP ${response.status} - ${response.statusText}`);
-        
-        const data = await response.json();
-        setInt(data);
-        setError(null);
-      } catch (error) {
-        if (error instanceof Error && error.name !== 'AbortError') {
-          console.error("API Error:", error);
-          setError(error.message || "Failed to fetch data");
-          setInt({}); // Send empty object on error
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    timeoutRef.current = setTimeout(fetchData, 2000);
+    timeoutRef.current = setTimeout(() => fetchData(apiInt), 2000);
     setIsWaiting(true);
 
     return () => {
