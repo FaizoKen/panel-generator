@@ -2,14 +2,15 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal";
 import { useRef, useState } from "react";
 import { useToasts } from "../../util/toasts";
-import { useEncodedMessageURL, useShortLink } from "./EncodedMessageURL";
+import { useEncodedMessageURL } from "./EncodedMessageURL";
 
 export default function ShareView() {
   const navigate = useNavigate();
   const createToast = useToasts((state) => state.create);
 
-  const encodedURL = useEncodedMessageURL();
-  const shortURL = useShortLink();
+  const EncodedMessageURL = useEncodedMessageURL();
+  const shortURL = EncodedMessageURL.shortURL;
+  const encodedURL = EncodedMessageURL.encodedURL;
   const [useShort, setUseShort] = useState(false);
 
   const urlTransform = useShort ? shortURL : encodedURL;
