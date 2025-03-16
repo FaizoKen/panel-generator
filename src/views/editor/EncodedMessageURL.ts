@@ -21,7 +21,7 @@ export const useShortLink = () => {
 
   useEffect(() => {
     if (encodedURL) {
-      fetch(`https://faizo.top?url=${encodedURL}`)
+      fetch(`https://faizo.top?data=${encodedURL.split('/').pop()}`)
         .then((res) => res.text())
         .then((shortened) => setShortURL(shortened))
         .catch((error) => console.error("Shortening failed:", error));
