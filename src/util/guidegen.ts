@@ -1,12 +1,11 @@
 import { usePanelVarStore } from "../state/panelvar";
 import { useCurrentMessageStore } from "../state/message";
 
-export function generateGuide() {
+export function generateGuide(customEmbedColor?: number) {
     const loc = usePanelVarStore.getState().loc;
     const domain = window.location.origin;
     
-    // Ensure the store has valid data before accessing properties
-    const embedColor = useCurrentMessageStore.getState().embeds?.[0]?.color ?? 0;
+    const embedColor = customEmbedColor ?? useCurrentMessageStore.getState().embeds?.[0]?.color ?? 0;
 
     // Define the expected type explicitly
     interface Field {

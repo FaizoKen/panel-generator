@@ -1,4 +1,4 @@
-import { InputJson } from "./transformJson";
+import { Panel } from "./transformJson";
 import {
   MessageComponentButtonStyle,
   EmbedField,
@@ -13,9 +13,9 @@ import {
   Emoji,
 } from "../discord/schema";
 
-export function reverseTransformJson(output: Message): InputJson {
+export function reverseTransformJson(output: Message): Panel {
   const parseColor = (color?: number) =>
-    color ? `#${color.toString(16).padStart(6, '0')}` : '#000000';
+    color ? `#${color.toString(16).padStart(6, '0')}` : null;
 
   const parseEmoji = (emoji?: { id?: string; name: string; animated?: boolean }) => {
     if (!emoji) return '';
@@ -45,9 +45,9 @@ export function reverseTransformJson(output: Message): InputJson {
   };
 
   return {
-    api_get: output.apiInt,
+    api_get: output.apiInt || null,
     raw_data: {
-      message: output.content,
+      message: output.content || null,
       panels: {
         is_name: !!embed1?.author,
         is_guide: !!embed3?.title,
@@ -57,12 +57,12 @@ export function reverseTransformJson(output: Message): InputJson {
         is_button: mainButton ? !mainButton.hidden : false,
         lang: "en",
         msg_color: parseColor(embed1?.color ?? embed2?.color ?? embed3?.color),
-        menu_name: selectMenu?.placeholder || "",
+        menu_name: selectMenu?.placeholder || null,
         button_color: buttonStyles[mainButton?.style ?? 1] || "PRIMARY",
-        button_emoji: mainButton?.emoji ? parseEmoji(mainButton.emoji) : "",
-        button_name: mainButton ? (mainButton as MessageComponentButton).label || "" : "",
-        image: getImageId(embed1?.image?.url),
-        title: embed2?.title || "",
+        button_emoji: mainButton?.emoji ? parseEmoji(mainButton.emoji) : null,
+        button_name: mainButton ? (mainButton as MessageComponentButton).label || "No Label" : "No Label",
+        image: getImageId(embed1?.image?.url) || null,
+        title: embed2?.title || null,
         description: embed2?.description || null,
         desc_image: embed2?.image?.url ? getImageId(embed2.image.url) : null,
         url: embed2?.url || null,
@@ -70,24 +70,24 @@ export function reverseTransformJson(output: Message): InputJson {
       modals:
         mainButton && "modals" in mainButton
           ? mainButton.modals.map(modal => ({
-              name: modal.name,
-              placeholder: modal.placeholder,
+              name: modal.name || null,
+              placeholder: modal.placeholder || null,
               value: modal.value || null,
               style: modal.style === 1 ? "SHORT" : "PARAGRAPH",
               required: modal.required ?? false,
-              minLength: modal.minLength?.toString() || "0",
-              maxLength: modal.maxLength?.toString() || "0",
+              minLength: modal.minLength?.toString() || null,
+              maxLength: modal.maxLength?.toString() || null,
             }))
           : [],
       options: selectMenu && 'options' in selectMenu
         ? selectMenu.options.map((opt: MessageComponentSelectMenuOption) => ({
-            emoji: opt.emoji ? parseEmoji(opt.emoji) : '',
-            label: opt.label,
-            description: opt.description || "",
-            msg_image: getImageId(opt.message_response?.image_url),
-            msg_description: opt.message_response?.description || "",
-            msg_color: parseColor(opt.message_response?.color),
-            url: opt.message_response?.url || "",
+            emoji: opt.emoji ? parseEmoji(opt.emoji) : null,
+            label: opt.label || null,
+            description: opt.description || null,
+            msg_image: getImageId(opt.message_response?.image_url) || null,
+            msg_description: opt.message_response?.description || null,
+            msg_color: parseColor(opt.message_response?.color) || null,
+            url: opt.message_response?.url || null,
           }))
         : [],
     },
