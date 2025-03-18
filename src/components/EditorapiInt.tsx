@@ -106,13 +106,13 @@ export default function EditorapiInt() {
   return (
     <Collapsable
       id="apiInt"
-      title="API Integrations"
+      title="Integrations"
       size="large"
       valiationPathPrefix="apiInt"
     >
     <div className="bg-dark-3 p-3 rounded-md">
       <EditorInput
-        label="JSON URL"
+        label="Public API / JSON URL"
         value={apiInt}
         onChange={setapiInt}
         validationPath="apiInt"

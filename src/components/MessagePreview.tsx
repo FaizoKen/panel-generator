@@ -28,31 +28,19 @@ interface ButtonResponse {
 function replaceVar(content: string, intData: any): string {
   return content.replace(/\{\{(.*?)\}\}/g, (match: string, key: string) => {
     const trimmedKey = key.trim();
-    const parts = trimmedKey.split('.');
-    const keys: string[] = [];
-
-    for (const part of parts) {
-      const base = part.split('[')[0];
-      keys.push(base);
-      const remaining = part.slice(base.length);
-      const indexRegex = /\[([^\]]*)\]/g;
-      let indexMatch;
-      while ((indexMatch = indexRegex.exec(remaining)) !== null) {
-        keys.push(indexMatch[1]);
-      }
-    }
+    const parts = trimmedKey.split(/\.|\[|\]/).filter(Boolean); // Split by dot and brackets
 
     let value: any = intData;
 
-    for (const k of keys) {
-      if (value && typeof value === "object" && k in value) {
+    for (const k of parts) {
+      if (value && typeof value === "object") {
         value = value[k];
       } else {
-        return match; // If not found, keep the placeholder
+        return match; // Keep placeholder if value is undefined
       }
     }
-    
-    return String(value);
+
+    return value !== undefined ? String(value) : match;
   });
 }
 
