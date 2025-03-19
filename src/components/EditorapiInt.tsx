@@ -106,7 +106,7 @@ export default function EditorapiInt() {
   return (
     <Collapsable
       id="apiInt"
-      title="Integrations"
+      title="Data Automation"
       size="large"
       valiationPathPrefix="apiInt"
     >

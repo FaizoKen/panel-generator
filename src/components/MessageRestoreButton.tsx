@@ -112,7 +112,7 @@ export default function MessageRestoreButton() {
     }
   }
 
-  const canRestore = !!webhookInfo;
+  const canRestore = !!webhookInfo && !!messageId;
 
   return (
     <div

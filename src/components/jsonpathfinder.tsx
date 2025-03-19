@@ -41,7 +41,7 @@ const JsonPathFinder: React.FC = () => {
 
   return (
 <div className="p-4 bg-gray-800 rounded-md shadow-md mt-3">
-  <h2 className="font-bold mb-2 text-gray-100">Data Variable Picker</h2>
+  <h2 className="font-bold mb-2 text-gray-100">Data Picker</h2>
   <p className="text-gray-400 text-sm mb-2">Click to copy the variable and paste it into a text editor to reveal the data</p>
   <ul className="mt-4 p-2 bg-gray-700 rounded-md shadow-md max-h-64 overflow-y-auto">
     {paths.map(({ path, value }) => (
