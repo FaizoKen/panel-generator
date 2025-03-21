@@ -51,7 +51,6 @@ export default function EditorEmbed({ embedIndex, embedId }: Props) {
         collapsable = {embedId === 3 ? false : true}
 
         size="large"
-        defaultCollapsed={true}
         extra={
           embedName && (
             <div className="text-gray-500 truncate flex space-x-2 pl-2">

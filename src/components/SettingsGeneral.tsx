@@ -1,6 +1,7 @@
 import { shallow } from "zustand/shallow";
 import { useSettingsStore } from "../state/settings";
 import CheckBox from "./CheckBox";
+import { useNavigate } from "react-router-dom";
 
 export default function SettingsGeneral() {
   const [editHistoryEnabled, setEditHistoryEnabled] = useSettingsStore(
@@ -8,12 +9,15 @@ export default function SettingsGeneral() {
     shallow
   );
 
+  const navigate = useNavigate();
+
   function clearAll() {
     const ok = confirm(
       "Are you sure you want to clear all local data? The message editor and all your app settings will be cleared. Your saved messages, scheduled messages, and custom commands will not be affected."
     );
     if (ok) {
       localStorage.clear();
+      navigate("/editor");
       window.location.reload();
     }
   }
