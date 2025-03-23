@@ -65,7 +65,7 @@ export function useGuildChannelsQuery(guildId: string | null) {
       return fetchApi(`/api/guilds/${guildId}/channels`).then((res) =>
         handleApiResponse(res.json())
       );
-    },{enabled:false}
+    },{enabled: !!guildId}
   );
 }
 
@@ -76,7 +76,7 @@ export function useGuildRolesQuery(guildId: string | null) {
       return fetchApi(`/api/guilds/${guildId}/roles`).then((res) =>
         handleApiResponse(res.json())
       );
-    },{enabled:false}
+    },{enabled: !!guildId}
   );
 }
 
@@ -84,10 +84,10 @@ export function useGuildEmojisQuery(guildId: string | null) {
   return useQuery<ListEmojisResponseWire>(
     ["guild", guildId, "emojis"],
     () => {
-      return fetchApi(`/api/guilds/${guildId}/emojis`).then((res) =>
+      return fetchApi(`http://localhost:3001/api/guilds/${guildId}/emojis`).then((res) =>
         handleApiResponse(res.json())
       );
-    },{enabled:false}
+    },{enabled: !!guildId}
   );
 }
 
