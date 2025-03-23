@@ -89,7 +89,7 @@ export default function SendMenuWebhook() {
   {/* Panel Key Section */}
   <div className="flex-auto sm:w-1/2">
     <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
-      Channel Key
+      Bot Webhook URL
     </div>
     <input
       type="url"
