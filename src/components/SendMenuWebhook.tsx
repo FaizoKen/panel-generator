@@ -140,10 +140,11 @@ export default function SendMenuWebhook() {
                   if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                   }
-                  const data = await response.json();
-                  if (data.guildId) {
-                    setSelectedGuildId(data.guildId);
+                  const { data: datas } = await response.json();
+                  if (datas.guildId) {
+                    setSelectedGuildId(datas.guildId);
                   } else {
+                    console.log(datas)
                     console.warn("No guildId found in the response.");
                   }
                 } catch (error) {
