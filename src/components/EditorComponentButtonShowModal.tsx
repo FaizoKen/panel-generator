@@ -211,7 +211,7 @@ export default function EditorComponentSelectMenuOption({
       />
 
       <EditorInput
-        label="Value"
+        label="Default Value"
         type={inputType}
         maxLength={80}
         value={modal.value}

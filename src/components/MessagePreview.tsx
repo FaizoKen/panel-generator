@@ -97,7 +97,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                 <span className="discord-author-username">
                   {msg.username || defaultUsername}
                 </span>
-                <span className="discord-application-tag">Bot</span>
+                <span className="discord-application-tag">App</span>
               </span>
               <span className="discord-message-timestamp pl-1">
                 Today at {currentTime}
@@ -414,7 +414,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                 alt=""
                 className="discord-replied-message-avatar"
               />
-              <span className="discord-application-tag">Bot</span>
+              <span className="discord-application-tag">App</span>
               <span className="discord-replied-message-username">
                 {msg.username || "Default"}
               </span>
@@ -436,7 +436,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                   <span className="discord-application-tag">
                     <svg
                       className="discord-application-tag-verified"
-                      aria-label="Verified Bot"
+                      aria-label="Verified App"
                       aria-hidden="false"
                       width="16"
                       height="16"
@@ -447,7 +447,7 @@ export default function MessagePreview({ msg }: { msg: Message }) {
                         fill="currentColor"
                       ></path>
                     </svg>
-                    Bot
+                    App
                   </span>
                 </span>
                 <span className="discord-message-timestamp pl-1">

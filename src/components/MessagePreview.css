@@ -331,6 +331,15 @@ I don't think this is used anywhere, but I'm keeping it here just in case.
   color: #23262a;
 }
 
+.discord-message .discord-author-info .discord-application-tag::before {
+  content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="white" d="M20.285 6.708l-10.3 10.293-5.3-5.293-1.415 1.415 6.715 6.707 11.715-11.707z"/></svg>');
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
+}
+
+
 .discord-message .discord-author-info .discord-application-tag {
   background-color: #5865f2;
   color: #fff;

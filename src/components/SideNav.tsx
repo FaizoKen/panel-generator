@@ -92,14 +92,14 @@ export default function SideNav() {
             <div className="flex flex-col space-y-4">
               <NavigationButton
                 href="/editor"
-                label="Message Editor"
+                label="Panel Editor"
                 icon={PencilSquareIcon}
                 collapsed={collapsed}
                 setHidden={setHidden}
               />
               <NavigationButton
                 href="/messages"
-                label="Saved Messages"
+                label="Panel Template"
                 icon={RectangleStackIcon}
                 collapsed={collapsed}
                 setHidden={setHidden}

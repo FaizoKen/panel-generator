@@ -168,7 +168,7 @@ export default function SendMenuWebhook() {
       <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
         <div className="flex-auto sm:w-1/2">
           <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
-            Bot Webhook URL
+            App Webhook URL
           </div>
           <input
             type="url"
