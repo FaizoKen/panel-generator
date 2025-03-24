@@ -89,7 +89,7 @@ export function useSendMessageToWebhookMutation() {
 
 export function useRestoreMessageFromWebhookMutation() {
   return useMutation((req: MessageRestoreFromWebhookRequestWire) => {
-    return fetchApi(`/api/restore-message/webhook`, {
+    return fetchApi(`http://localhost:3002/api/restore-message/webhook`, {
       method: "POST",
       body: JSON.stringify(req),
       headers: {

@@ -281,6 +281,8 @@ export interface MessageRestoreFromChannelRequestWire {
 export interface MessageRestoreResponseDataWire {
   data: Record<string, any> | null;
   attachments: (MessageAttachmentWire | undefined)[];
+  api_get: string; // Change type from () => void to string
+  raw_data: any;
 }
 export type MessageRestoreResponseWire = APIResponse<MessageRestoreResponseDataWire>;
 

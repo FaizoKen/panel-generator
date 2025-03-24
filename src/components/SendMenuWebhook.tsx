@@ -237,7 +237,9 @@ export default function SendMenuWebhook() {
                   : "bg-blurple hover:bg-blurple-dark cursor-pointer"
               }`}
               role="button"
-              onClick={() => send(true)}
+              onClick={() => {
+                if (webhookInfo) send(true); // Prevent click if !webhookInfo
+              }}
             >
               {sendToWebhookMutation.isLoading && (
                 <div className="h-2 w-2 bg-white rounded-full animate-ping"></div>
@@ -252,7 +254,9 @@ export default function SendMenuWebhook() {
                 : "bg-blurple hover:bg-blurple-dark cursor-pointer"
             }`}
             role="button"
-            onClick={() => send(false)}
+            onClick={() => {
+              if (webhookInfo) send(false); // Prevent click if !webhookInfo
+            }}
           >
             {sendToWebhookMutation.isLoading && (
               <div className="h-2 w-2 bg-white rounded-full animate-ping"></div>

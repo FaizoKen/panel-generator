@@ -12,6 +12,7 @@ import { useCurrentAttachmentsStore } from "../state/attachments";
 import { getUniqueId } from "../util";
 import { useToasts } from "../util/toasts";
 import { parseWebhookUrl } from "../discord/util";
+import { transformJson } from "../util/transformJson";
 
 export default function MessageRestoreButton() {
   const [mode, webhookUrl, messageId, threadId, guildId, channelId] =
@@ -39,7 +40,8 @@ export default function MessageRestoreButton() {
 
   function restoreData(data: MessageRestoreResponseDataWire) {
     try {
-      const parsedData = parseMessageWithAction(data.data);
+      // const parsedData = parseMessageWithAction(data);
+      const parsedData = transformJson(data);
       useCurrentMessageStore.getState().replace(parsedData);
 
       if (data.attachments) {
