@@ -94,12 +94,12 @@ export default function EditorapiInt() {
   }, [apiInt, setInt]);
 
   const getStatusMessage = () => {
-    if (error) return <div style={{ color: 'red', fontSize: '0.875rem', marginTop: '0.5rem' }}>{error}</div>;
-    if (isLoading) return <div style={{ color: 'gray', fontSize: '0.875rem', marginTop: '0.5rem' }}>Loading...</div>;
-    if (isWaiting) return <div style={{ color: 'gray', fontSize: '0.875rem', marginTop: '0.5rem' }}>Waiting for input...</div>;
-    if (int && Object.keys(int).length > 0) return (
-      <div style={{ color: 'green', fontSize: '0.875rem', marginTop: '0.5rem' }}>Successfully loaded data</div>
-    );
+    if (error) return <div style={{ color: 'pink', fontSize: '0.875rem', marginTop: '0.5rem' }}>{error}</div>;
+    // if (isLoading) return <div style={{ color: 'gray', fontSize: '0.875rem', marginTop: '0.5rem' }}>Loading...</div>;
+    if (isWaiting || isLoading) return <div style={{ color: 'gray', fontSize: '0.875rem', marginTop: '0.5rem' }}>Loading...</div>;
+    // if (int && Object.keys(int).length > 0) return (
+    //   <div style={{ color: 'green', fontSize: '0.875rem', marginTop: '0.5rem' }}>Successfully loaded data</div>
+    // );
     return null;
   };
 

@@ -5,7 +5,6 @@ import { useCurrentMessageStore } from "../../state/message";
 import { json, jsonParseLinter } from "@codemirror/lang-json";
 import { githubDark } from "@uiw/codemirror-theme-github";
 import { linter, lintGutter } from "@codemirror/lint";
-import { parseMessageWithAction } from "../../discord/restoreSchema";
 import { useNavigate } from "react-router-dom";
 import { useToasts } from "../../util/toasts";
 import { transformJson } from "../../util/transformJson";
@@ -29,9 +28,8 @@ export default function JsonView() {
     try {
       const dataRaw = JSON.parse(raw);
       const data = transformJson(dataRaw);
-      const parsedData = parseMessageWithAction(data);
 
-      msg.replace(parsedData);
+      msg.replace(data);
       navigate("/editor");
     } catch (e) {
       console.error(e);

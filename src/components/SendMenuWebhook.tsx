@@ -8,11 +8,14 @@ import { useValidationErrorStore } from "../state/validationError";
 import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
 import { useCurrentAttachmentsStore } from "../state/attachments";
 import { useSendSettingsStore } from "../state/sendSettings";
+import { usePanelVarStore } from "../state/panelvar";
 import { shallow } from "zustand/shallow";
 import { messageUrlRegex, parseWebhookUrl } from "../discord/util";
 import MessageRestoreButton from "./MessageRestoreButton";
 import { useToasts } from "../util/toasts";
 import { useGuildEmojisQuery } from "../api/queries";
+import { transformJson } from "../util/transformJson";
+import { reverseTransformJson } from "../util/reverseTransformJson";
 
 export default function SendMenuWebhook() {
   const validationError = useValidationErrorStore((state) =>
@@ -41,8 +44,54 @@ export default function SendMenuWebhook() {
     (state) => [state.setGuildId],
     shallow
   );
+  const msg = useCurrentMessageStore();
+  const updateMessage = () => {
+    const transformedData = transformJson(reverseTransformJson(msg));
+    msg.replace(transformedData);
+  };
 
   const fetchTimeout = useRef<NodeJS.Timeout | null>(null);
+  const [isFetching, setIsFetching] = useState(false); // Add state for fetch indicator
+  const [fetchError, setFetchError] = useState<string | null>(null); // Add state for fetch error
+
+  useEffect(() => {
+    if (webhookUrl && !fetchTimeout.current) { // Ensure no duplicate fetch
+      setFetchError(null); // Reset fetch error
+      setIsFetching(true); // Set fetching to true
+      fetchTimeout.current = setTimeout(async () => {
+        try {
+          const response = await fetch(webhookUrl);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const { data: data } = await response.json();
+          if (data.guildId) {
+            setSelectedGuildId(data.guildId);
+
+            usePanelVarStore.getState().setLoc({
+              guildId: data.guildId,
+              botName: data.botName,
+              botIconUrl: data.botIconUrl,
+              panelChannelId: data.panelChannelId,
+              ruleChannelId: data.ruleChannelId,
+              guildName: data.guildName,
+              guildIconUrl: data.guildIconUrl,
+            });
+
+            updateMessage();
+          } else {
+            console.warn("No guildId found in the response.");
+          }
+        } catch (error) {
+          console.error("Failed to fetch guildId:", error);
+          setFetchError("Failed to fetch webhook details. Please check the URL.");
+        } finally {
+          setIsFetching(false); // Set fetching to false
+          fetchTimeout.current = null;
+        }
+      }, 2000);
+    }
+  }, [webhookUrl]); // Dependency array ensures this runs when webhookUrl changes
 
   function send(edit: boolean) {
     if (!webhookInfo) {
@@ -126,36 +175,28 @@ export default function SendMenuWebhook() {
             className="bg-dark-2 px-3 py-2 rounded w-full focus:outline-none text-white"
             onChange={(e) => {
               setWebhookUrl(e.target.value || null);
+              setFetchError(null); // Reset fetch error
               if (fetchTimeout.current) {
                 clearTimeout(fetchTimeout.current);
                 fetchTimeout.current = null;
               }
               if (!e.target.value) {
                 setSelectedGuildId(null);
+
+                usePanelVarStore.getState().resetLoc();
+                
+                updateMessage();
                 return;
               }
-              fetchTimeout.current = setTimeout(async () => {
-                try {
-                  const response = await fetch(e.target.value);
-                  if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                  }
-                  const { data: datas } = await response.json();
-                  if (datas.guildId) {
-                    setSelectedGuildId(datas.guildId);
-                  } else {
-                    console.log(datas)
-                    console.warn("No guildId found in the response.");
-                  }
-                } catch (error) {
-                  console.error("Failed to fetch guildId:", error);
-                } finally {
-                  fetchTimeout.current = null;
-                }
-              }, 2000);
             }}
             value={webhookUrl || ""}
           />
+          {isFetching && (
+            <div className="text-gray-400 text-sm mt-2">Fetching webhook details...</div>
+          )}
+          {fetchError && (
+            <div  style={{ color: 'pink'}} className="text-sm mt-2">{fetchError}</div>
+          )}
         </div>
         <div className="flex-auto sm:w-1/2">
           <div className="uppercase text-gray-300 text-sm font-medium mb-1.5">
@@ -169,9 +210,11 @@ export default function SendMenuWebhook() {
           />
         </div>
       </div>
-      <div className="text-orange-300 font-light">
-        Custom channels, roles & emojis are only available when inserting a channel key
-      </div>
+      {!webhookInfo && (
+        <div className="text-orange-300 font-light">
+          Custom channels, roles, and emojis are only accessible when a Bot Webhook URL is provided.
+        </div>
+      )}
       <div>
         {validationError && (
           <div className="flex items-center text-red space-x-1">

@@ -5,7 +5,6 @@ import MessagePreview from "../../components/MessagePreview";
 import { useSharedMessageQuery } from "../../api/queries";
 import { useMemo } from "react";
 import { useToasts } from "../../util/toasts";
-import { parseMessageWithAction } from "../../discord/restoreSchema";
 import { transformJson } from "../../util/transformJson";
 
 const decodeMessage = (sharedMessageId: string | undefined) => {
@@ -39,9 +38,8 @@ export default function ShareRestoreView() {
     if (decodedMessageRaw) {
       try {
         const decodedMessage = transformJson(decodedMessageRaw);
-        const parsedData = parseMessageWithAction(decodedMessage);
       
-        return parsedData;
+        return decodedMessage;
       } catch (e) {
         createToast({
           type: "error",
