@@ -148,6 +148,9 @@ export default function SendMenuWebhook() {
               title: edit ? "Message Edited" : "Message Sent",
               message: `The message has been ${edit ? "edited" : "sent"} successfully!`,
             });
+            if (resp.data?.message_id) {
+              setMessageId(resp.data.message_id); // Set messageId from response
+            }
           } else {
             createToast({
               type: "error",
