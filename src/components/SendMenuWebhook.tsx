@@ -45,6 +45,7 @@ export default function SendMenuWebhook() {
     shallow
   );
   const msg = useCurrentMessageStore();
+
   const updateMessage = () => {
     const transformedData = transformJson(reverseTransformJson(msg));
     msg.replace(transformedData);
@@ -116,7 +117,7 @@ export default function SendMenuWebhook() {
         webhook_type: webhookInfo.type,
         webhook_id: webhookInfo.id,
         webhook_token: webhookInfo.token,
-        data: useCurrentMessageStore.getState(),
+        data: reverseTransformJson(msg),
         attachments: useCurrentAttachmentsStore.getState().attachments,
         thread_id: null,
         message_id: edit ? messageId : null,

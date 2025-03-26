@@ -77,7 +77,7 @@ export function useSendMessageToChannelMutation() {
 
 export function useSendMessageToWebhookMutation() {
   return useMutation((req: MessageSendToWebhookRequestWire) => {
-    return fetchApi(`/api/send-message/webhook`, {
+    return fetchApi(`https://quicksupport.faizo.top/api/send-message/webhook`, {
       method: "POST",
       body: JSON.stringify(req),
       headers: {
