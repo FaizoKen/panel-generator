@@ -16,8 +16,13 @@ import { useToasts } from "../util/toasts";
 import { useGuildEmojisQuery } from "../api/queries";
 import { transformJson } from "../util/transformJson";
 import { reverseTransformJson } from "../util/reverseTransformJson";
+import { useNavigate, useSearchParams } from "react-router-dom"; // Import useSearchParams
 
 export default function SendMenuWebhook() {
+  const [searchParams] = useSearchParams(); // Get query parameters
+  const initialWebhookUrl = searchParams.get("webhookUrl") || null; // Parse webhookUrl
+  const initialMessageId = searchParams.get("messageId") || null; // Parse messageId
+
   const validationError = useValidationErrorStore((state) =>
     state.checkIssueByPathPrefix("")
   );
@@ -50,10 +55,23 @@ export default function SendMenuWebhook() {
     const transformedData = transformJson(reverseTransformJson(msg));
     msg.replace(transformedData);
   };
+  const navigate = useNavigate();
 
   const fetchTimeout = useRef<NodeJS.Timeout | null>(null);
   const [isFetching, setIsFetching] = useState(false); // Add state for fetch indicator
   const [fetchError, setFetchError] = useState<string | null>(null); // Add state for fetch error
+
+  useEffect(() => {
+    if (initialWebhookUrl) {
+      setWebhookUrl(initialWebhookUrl); // Initialize webhookUrl from query param
+      if (initialMessageId) {
+        setMessageId(initialMessageId); // Initialize messageId from query param
+      } else {
+        setMessageId(""); // Make it empty if initialMessageId is not provided
+      }
+      navigate("/editor");
+    }
+  }, [initialWebhookUrl, initialMessageId, setWebhookUrl, setMessageId, navigate]);
 
   useEffect(() => {
     if (webhookUrl && !fetchTimeout.current) { // Ensure no duplicate fetch

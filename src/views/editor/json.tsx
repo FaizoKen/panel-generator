@@ -42,6 +42,38 @@ export default function JsonView() {
     }
   }
 
+  function handleImport(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const content = e.target?.result as string;
+          const parsed = JSON.parse(content);
+          setRaw(JSON.stringify(parsed, null, 2));
+        } catch (err) {
+          console.error(err);
+          createToast({
+            type: "error",
+            title: "Invalid JSON File",
+            message: "The uploaded file is not a valid JSON file.",
+          });
+        }
+      };
+      reader.readAsText(file);
+    }
+  }
+
+  function handleExport() {
+    const blob = new Blob([raw], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "panel.json";
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <Modal height="full" onClose={() => navigate("/editor")}>
       <div className="h-full flex flex-col p-1.5 md:p-3">
@@ -60,6 +92,26 @@ export default function JsonView() {
           onChange={(v) => setRaw(v)}
         />
         <div className="mt-3 flex justify-end space-x-2">
+          <input
+            type="file"
+            accept="application/json"
+            id="import-json"
+            className="hidden"
+            onChange={handleImport}
+          />
+          <label
+            htmlFor="import-json"
+            className="border-dark-7 bg-purple-700 hover:bg-purple-800 px-3 py-2 rounded text-white cursor-pointer"
+          >
+            Import
+          </label>
+          <button
+            className="border-dark-7 bg-purple-700 hover:bg-purple-800 px-3 py-2 rounded text-white"
+            onClick={handleExport}
+          >
+            Export
+          </button>
+          <div></div>
           <button
             className="border-2 border-dark-7 hover:bg-dark-5 px-3 py-2 rounded text-white"
             onClick={() => navigate("/editor")}
