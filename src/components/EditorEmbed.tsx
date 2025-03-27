@@ -7,7 +7,7 @@ import { shallow } from "zustand/shallow";
 import EditorEmbedImages from "./EditorEmbedImages";
 import { useMemo } from "react";
 import { colorIntToHex } from "../util/discord";
-import { FaceSmileIcon } from "@heroicons/react/20/solid";
+import { TrashIcon } from "@heroicons/react/20/solid";
 
 interface Props {
   embedIndex: number;
@@ -61,6 +61,13 @@ export default function EditorEmbed({ embedIndex, embedId }: Props) {
         }
         buttons={
           <div className="flex-none text-gray-300 flex items-center space-x-2">
+                                            {embedId === 2 && (
+                    <TrashIcon
+                    className="h-5 w-5 flex-none"
+                    role="button"
+                    onClick={() => remove(1)}
+                  />
+          )}  
                                 {embedId === 3 && (
             <EditorEmbedGuide embedIndex={embedIndex} embedId={embedId} />
           )}                                {embedId === 1 && (

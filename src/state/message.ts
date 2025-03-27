@@ -383,9 +383,13 @@ export const createMessageStore = (key: string) =>
                 if (!state.embeds) {
                   return;
                 }
-                state.embeds.splice(i, 1);
+                const oldColor = state.embeds[i]?.color ?? undefined; // Preserve the old color or fallback to default
+                state.embeds[i] = { id: 2, fields: [], hidden: false, color: oldColor };
               });
             },
+            
+            
+            
             setEmbedDescription: (
               i: number,
               description: string | undefined

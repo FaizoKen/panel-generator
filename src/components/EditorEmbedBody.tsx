@@ -36,7 +36,7 @@ export default function EditorEmbedBody({ embedIndex, embedId }: Props) {
       shallow
     );
 
-  console.log("render body", embedIndex);
+  // console.log("render body", embedIndex);
 
   return (
 <div>
