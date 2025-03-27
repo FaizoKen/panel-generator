@@ -101,12 +101,12 @@ export default function JsonView() {
           />
           <label
             htmlFor="import-json"
-            className="border-dark-7 bg-purple-700 hover:bg-purple-800 px-3 py-2 rounded text-white cursor-pointer"
+            className="border-dark-7 bg-purple-800 hover:bg-purple-900 px-3 py-2 rounded text-white cursor-pointer"
           >
             Import
           </label>
           <button
-            className="border-dark-7 bg-purple-700 hover:bg-purple-800 px-3 py-2 rounded text-white"
+            className="border-dark-7 bg-purple-800 hover:bg-purple-900 px-3 py-2 rounded text-white"
             onClick={handleExport}
           >
             Export
