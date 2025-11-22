@@ -49,23 +49,32 @@ export function useUserQuery(userId = "@me") {
       return fetchApi(`/api/users/${userId}`).then((res) =>
         handleApiResponse(res.json())
       );
-    },{enabled:false});
+    },
+    { enabled: false }
+  );
 }
 
 export function useGuildsQuery() {
-  return useQuery<ListGuildsResponseWire>(["guilds"], () => {
-    return fetchApi(`/api/guilds`).then((res) => handleApiResponse(res.json()));
-  },{enabled:false});
+  return useQuery<ListGuildsResponseWire>(
+    ["guilds"],
+    () => {
+      return fetchApi(`/api/guilds`).then((res) =>
+        handleApiResponse(res.json())
+      );
+    },
+    { enabled: false }
+  );
 }
 
 export function useGuildChannelsQuery(guildId: string | null) {
   return useQuery<ListChannelsResponseWire>(
     ["guild", guildId, "channels"],
     () => {
-      return fetchApi(`https://quicksupport.faizo.top/api/guilds/${guildId}/channels`).then((res) =>
-        handleApiResponse(res.json())
-      );
-    },{enabled: !!guildId}
+      return fetchApi(
+        `https://api-quicksupport.faizo.net/api/guilds/${guildId}/channels`
+      ).then((res) => handleApiResponse(res.json()));
+    },
+    { enabled: !!guildId }
   );
 }
 
@@ -73,10 +82,11 @@ export function useGuildRolesQuery(guildId: string | null) {
   return useQuery<ListRolesResponseWire>(
     ["guild", guildId, "roles"],
     () => {
-      return fetchApi(`https://quicksupport.faizo.top/api/guilds/${guildId}/roles`).then((res) =>
-        handleApiResponse(res.json())
-      );
-    },{enabled: !!guildId}
+      return fetchApi(
+        `https://api-quicksupport.faizo.net/api/guilds/${guildId}/roles`
+      ).then((res) => handleApiResponse(res.json()));
+    },
+    { enabled: !!guildId }
   );
 }
 
@@ -84,10 +94,11 @@ export function useGuildEmojisQuery(guildId: string | null) {
   return useQuery<ListEmojisResponseWire>(
     ["guild", guildId, "emojis"],
     () => {
-      return fetchApi(`https://quicksupport.faizo.top/api/guilds/${guildId}/emojis`).then((res) =>
-        handleApiResponse(res.json())
-      );
-    },{enabled: !!guildId}
+      return fetchApi(
+        `https://api-quicksupport.faizo.net/api/guilds/${guildId}/emojis`
+      ).then((res) => handleApiResponse(res.json()));
+    },
+    { enabled: !!guildId }
   );
 }
 
@@ -98,7 +109,8 @@ export function useGuildBrandingQuery(guildId: string | null) {
       return fetchApi(`/api/guilds/${guildId}/branding`).then((res) =>
         handleApiResponse(res.json())
       );
-    },{enabled:false}
+    },
+    { enabled: false }
   );
 }
 
@@ -111,7 +123,8 @@ export function useSavedMessagesQuery(guildId: string | null) {
         url += `?guild_id=${guildId}`;
       }
       return fetchApi(url).then((res) => handleApiResponse(res.json()));
-    },{enabled:false}
+    },
+    { enabled: false }
   );
 }
 
@@ -121,7 +134,8 @@ export function useSharedMessageQuery(messageId: string | null) {
     () => {
       let url = `/api/shared-messages/${messageId}`;
       return fetchApi(url).then((res) => handleApiResponse(res.json()));
-    },{enabled:false}
+    },
+    { enabled: false }
   );
 }
 
@@ -131,7 +145,8 @@ export function usePremiumGuildFeaturesQuery(guildId?: string | null) {
     () =>
       fetchApi(`/api/premium/features?guild_id=${guildId}`).then((res) =>
         handleApiResponse(res.json())
-      ),{enabled:false}
+      ),
+    { enabled: false }
   );
 }
 
@@ -141,7 +156,8 @@ export function usePremiumGuildEntitlementsQuery(guildId?: string | null) {
     () =>
       fetchApi(`/api/premium/entitlements?guild_id=${guildId}`).then((res) =>
         handleApiResponse(res.json())
-      ),{enabled:false}
+      ),
+    { enabled: false }
   );
 }
 
@@ -151,7 +167,8 @@ export function usePremiumUserEntitlementsQuery() {
     () =>
       fetchApi(`/api/premium/entitlements`).then((res) =>
         handleApiResponse(res.json())
-      ),{enabled:false}
+      ),
+    { enabled: false }
   );
 }
 
@@ -161,7 +178,8 @@ export function usePremiumUserFeaturesQuery() {
     () =>
       fetchApi(`/api/premium/features`).then((res) =>
         handleApiResponse(res.json())
-      ),{enabled:false}
+      ),
+    { enabled: false }
   );
 }
 
@@ -171,7 +189,8 @@ export function useCustomBotQuery(guildId: string | null) {
     () =>
       fetchApi(`/api/custom-bot?guild_id=${guildId}`).then((res) =>
         handleApiResponse(res.json())
-      ),{enabled:false}
+      ),
+    { enabled: false }
   );
 }
 
@@ -181,7 +200,8 @@ export function useCustomCmmandsQuery(guildId: string | null) {
     () =>
       fetchApi(`/api/custom-bot/commands?guild_id=${guildId}`).then((res) =>
         handleApiResponse(res.json())
-      ),{enabled:false}
+      ),
+    { enabled: false }
   );
 }
 
@@ -195,7 +215,7 @@ export function useCustomCmmandQuery(
       fetchApi(
         `/api/custom-bot/commands/${commandId}?guild_id=${guildId}`
       ).then((res) => handleApiResponse(res.json())),
-      {enabled:false}
+    { enabled: false }
   );
 }
 
@@ -205,6 +225,7 @@ export function useScheduledMessagesQuery(guildId: string | null) {
     () =>
       fetchApi(`/api/scheduled-messages?guild_id=${guildId}`).then((res) =>
         handleApiResponse(res.json())
-      ),{enabled:false}
+      ),
+    { enabled: false }
   );
 }
